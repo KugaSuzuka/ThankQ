@@ -1,0 +1,26 @@
+name: Bug Fix
+description: バグの報告・修正
+labels: [fix]
+body:
+  - type: textarea
+    id: bug
+    attributes:
+      label: バグの内容
+      description: 発生している問題を明確に書いてください。
+      placeholder: 例）回答が保存されない、画面が白くなる
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 再現手順
+      description: どのようにそのバグを再現できるか
+      placeholder: 1. ○○ページにアクセス → 2. 入力 → 3. 送信
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 優先度
+      options:
+        - 高
+        - 中
+        - 低

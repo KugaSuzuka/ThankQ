@@ -1,0 +1,25 @@
+name: Question / Discussion
+description: 検討中の項目・相談事項
+labels: [question]
+body:
+  - type: textarea
+    id: topic
+    attributes:
+      label: 話したい内容・検討ポイント
+      description: 決めきれていないことや迷っていることを記述してください。
+      placeholder: 例）クイズとコメントフォームを分けるべきか？
+    validations:
+      required: true
+  - type: textarea
+    id: background
+    attributes:
+      label: 背景・目的
+      description: なぜそれを検討しているのか、前提も含めて書いてください。
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: 緊急度
+      options:
+        - 今すぐ話したい
+        - 今週中には決めたい
+        - あとで考えたい

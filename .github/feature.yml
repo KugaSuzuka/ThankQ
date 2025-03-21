@@ -1,0 +1,26 @@
+name: Feature
+description: 新機能の提案や追加
+labels: [feature]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: 概要
+      description: どんな機能を追加するか説明してください。
+      placeholder: 例）ゲストのクイズ回答画面を作る
+    validations:
+      required: true
+  - type: textarea
+    id: implementation
+    attributes:
+      label: 実装内容
+      description: 想定している実装手順や技術について書いてください。
+      placeholder: 使用予定のコンポーネント、ルート、DB構造など
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 優先度
+      options:
+        - 高
+        - 中
+        - 低
