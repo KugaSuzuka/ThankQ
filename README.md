@@ -23,8 +23,8 @@
 
 ```bash
 # クローン
-git clone https://github.com/your-username/kanshaq.git
-cd kanshaq
+git clone https://github.com/KugaSuzuka/ThankQ.git
+cd ThankQ
 
 # Laravel セットアップ
 composer install
