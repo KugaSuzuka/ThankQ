@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Wedding;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class WeddingSeeder extends Seeder
@@ -15,7 +14,7 @@ class WeddingSeeder extends Seeder
     {
         Wedding::factory()
             ->create([
-            'name' => '藤村家・久賀家結婚式',
-        ]);
+                'name' => '藤村家・久賀家結婚式',
+            ]);
     }
 }

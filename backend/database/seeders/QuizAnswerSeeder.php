@@ -6,7 +6,6 @@ use App\Models\Guest;
 use App\Models\Quiz;
 use App\Models\QuizAnswer;
 use App\Models\QuizChoice;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class QuizAnswerSeeder extends Seeder

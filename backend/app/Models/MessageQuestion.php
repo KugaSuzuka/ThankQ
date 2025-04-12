@@ -19,6 +19,7 @@ class MessageQuestion extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
     public function wedding(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Wedding::class);

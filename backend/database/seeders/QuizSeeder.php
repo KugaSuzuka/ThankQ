@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Quiz;
 use App\Models\Wedding;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class QuizSeeder extends Seeder

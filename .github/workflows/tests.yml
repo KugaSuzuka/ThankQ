@@ -1,0 +1,52 @@
+name: Run Tests (ThankQ)
+
+on:
+  push:
+    branches:  [main]
+    paths:
+      - .github/workflows/tests.yml
+      - backend/**
+  pull_request:
+    paths:
+      - .github/workflows/tests.yml
+      - backend/**
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: laravel
+          MYSQL_USER: sail
+          MYSQL_PASSWORD: password
+        ports:
+          - 3306:3306
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+      - name: Install composer
+        run: composer install --prefer-dist --no-progress --no-interaction
+      - name: Copy .env.example to .env
+        run: cp .env.example .env
+      - name: Generate key
+        run: php artisan key:generate
+      - name: Pint
+        run: ./vendor/bin/pint --test
+      - name: Run migrate
+        run: php artisan migrate --env=testing
+      - name: Test
+        run: php artisan test

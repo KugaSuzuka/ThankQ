@@ -17,7 +17,7 @@ class WeddingFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->lastName() . '家・' . fake()->lastName() . '家結婚式',
-            ];
+            'name' => fake()->lastName().'家・'.fake()->lastName().'家結婚式',
+        ];
     }
 }
