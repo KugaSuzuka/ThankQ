@@ -3,13 +3,7 @@ name: Run Tests (ThankQ)
 on:
   push:
     branches:  [main]
-    paths:
-      - .github/workflows/tests.yml
-      - backend/**
   pull_request:
-    paths:
-      - .github/workflows/tests.yml
-      - backend/**
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
