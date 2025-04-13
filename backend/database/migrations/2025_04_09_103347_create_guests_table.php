@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name', 100);
             $table->foreignId('user_id')->comment('ユーザーID');
             $table->uuid('access_token')->unique()->comment('ゲスト専用アクセス用トークン');
-            $table->text('thank_message')->nullable()->comment('ゲストへの感謝メッセージ');
+            $table->text('thanks_message')->nullable()->comment('ゲストへの感謝メッセージ');
             $table->timestamps();
             $table->comment('ゲスト');
         });

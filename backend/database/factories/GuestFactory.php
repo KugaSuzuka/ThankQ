@@ -22,8 +22,7 @@ class GuestFactory extends Factory
             'name' => fake()->name(),
             'user_id' => User::factory(),
             'access_token' => Str::uuid(),
-            'thank_message' => fake()->realText(100),
-            'photo_path' => 'guest_photos/sample.jpg',
+            'thanks_message' => fake()->realText(100),
         ];
     }
 }

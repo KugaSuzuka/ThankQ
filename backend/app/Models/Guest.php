@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperGuest
+ */
 class Guest extends Model
 {
     /** @use HasFactory<\Database\Factories\GuestFactory> */
@@ -14,7 +17,7 @@ class Guest extends Model
         'name',
         'user_id',
         'access_token',
-        'thank_message',
+        'thanks_message',
         'photo_path',
     ];
 
@@ -26,5 +29,10 @@ class Guest extends Model
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function guestPhotos(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(GuestPhoto::class);
     }
 }
