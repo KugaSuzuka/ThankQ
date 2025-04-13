@@ -50,6 +50,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Guest::class);
     }
+
     public function wedding(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Wedding::class);

@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Guest;
 use App\Models\MessageQuestion;
-use App\Models\Wedding;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

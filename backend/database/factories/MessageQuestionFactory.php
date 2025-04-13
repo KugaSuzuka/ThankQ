@@ -2,8 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Guest;
-use App\Models\MessageQuestion;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

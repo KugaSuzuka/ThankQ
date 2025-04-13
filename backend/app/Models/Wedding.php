@@ -13,18 +13,22 @@ class Wedding extends Model
     protected $fillable = [
         'name',
     ];
+
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
     public function guests(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Guest::class);
     }
+
     public function messageQuestions(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(MessageQuestion::class);
     }
+
     public function quizzes(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Quiz::class);

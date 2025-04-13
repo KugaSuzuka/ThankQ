@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\QuizChoice;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Wedding;
@@ -18,15 +17,15 @@ class DatabaseSeeder extends Seeder
         $this->call([WeddingSeeder::class]);
         User::factory()
             ->count(2)
-             ->recycle(Wedding::all())
+            ->recycle(Wedding::all())
             ->sequence([
                 'name' => '藤村和弥',
-                'email'=>'test@example.com'
+                'email' => 'test@example.com',
             ],
-            [
-                'name' => '久賀鈴香',
-                'email'=>'test2@example.com'
-            ]
+                [
+                    'name' => '久賀鈴香',
+                    'email' => 'test2@example.com',
+                ]
             )
             ->create([
                 'password' => bcrypt('password'),
