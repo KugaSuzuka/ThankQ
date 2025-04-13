@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             ]);
         $this->call([
             GuestSeeder::class,
+            GuestPhotoSeeder::class,
             QuizSeeder::class,
             QuizChoiceSeeder::class,
             QuizAnswerSeeder::class,
