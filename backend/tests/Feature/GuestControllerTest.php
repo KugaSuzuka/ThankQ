@@ -23,7 +23,7 @@ class GuestControllerTest extends TestCase
         ]);
         $this->getJson('/api/guests/'.$guest->access_token)
             ->tap(function (TestResponse $response) {
-                 echo __METHOD__ . '()#L' . __LINE__ . ':' . json_encode($response->json('data'), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL;
+                echo __METHOD__.'()#L'.__LINE__.':'.json_encode($response->json('data'), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL;
             })
             ->assertOk()
             ->assertJson([
