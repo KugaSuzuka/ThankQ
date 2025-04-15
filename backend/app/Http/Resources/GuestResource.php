@@ -23,7 +23,7 @@ class GuestResource extends JsonResource
             'guest_photos' => $this->guestPhotos
                 ?->map(fn ($photo) => [
                     'id' => $photo->id,
-                    'photo_path' => $photo->photo_path,
+                    'photo_path' => $photo->file_temporary_url,
                 ])
                 ->toArray(),
         ];
