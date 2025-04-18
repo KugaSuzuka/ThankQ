@@ -27,4 +27,14 @@ class Quiz extends Model
     {
         return $this->belongsTo(Wedding::class);
     }
+
+    public function quizAnswers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(QuizAnswer::class);
+    }
+
+    public function quizChoices(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(QuizChoice::class);
+    }
 }
