@@ -11,7 +11,7 @@ class QuizController extends Controller
     /**
      * 結婚式に紐づくクイズ一覧を取得する
      */
-    public function index(Request $request, int $wedding_id)
+    public function index(Request $request, int $wedding_id): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
         return QuizResource::collection(
             Quiz::query()
