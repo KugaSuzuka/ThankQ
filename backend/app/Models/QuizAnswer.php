@@ -14,9 +14,8 @@ class QuizAnswer extends Model
     use HasFactory;
 
     protected $fillable = [
+        'quiz_choice_id',
         'guest_id',
-        'quiz_id',
-        'answer',
     ];
 
     protected $casts = [
