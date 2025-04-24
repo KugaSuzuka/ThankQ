@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->foreignId('wedding_id')->comment('結婚式ID');
+            $table->foreignId('wedding_id')->nullable()->comment('結婚式ID');
             $table->rememberToken();
             $table->timestamps();
         });
