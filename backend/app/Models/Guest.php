@@ -17,8 +17,9 @@ class Guest extends Model
         'name',
         'user_id',
         'access_token',
-        'thanks_message',
-        'photo_path',
+        'message_from_groom',
+        'message_from_bride',
+        'wedding_id',
     ];
 
     protected $casts = [
@@ -34,5 +35,17 @@ class Guest extends Model
     public function guestPhotos(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(GuestPhoto::class);
+    }
+
+    public function groom(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(User::class, 'wedding_id', 'wedding_id')
+            ->where('role', 'groom');
+    }
+
+    public function bride(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(User::class, 'wedding_id', 'wedding_id')
+            ->where('role', 'bride');
     }
 }

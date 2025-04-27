@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Models\Wedding;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -21,8 +22,10 @@ class GuestFactory extends Factory
         return [
             'name' => fake()->name(),
             'user_id' => User::factory(),
+            'wedding_id' => Wedding::factory(),
             'access_token' => Str::uuid(),
-            'thanks_message' => fake()->realText(100),
+            'message_from_groom' => fake()->realText(100),
+            'message_from_bride' => fake()->realText(100),
         ];
     }
 }

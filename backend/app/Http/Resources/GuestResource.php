@@ -19,7 +19,16 @@ class GuestResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'message' => $this->thanks_message,
+            'messages' => [
+                [
+                    'name' => $this->groom->name,
+                    'message' => $this->message_from_groom,
+                ],
+                [
+                    'name' => $this->bride->name,
+                    'message' => $this->message_from_bride,
+                ],
+            ],
             'guest_photos' => $this->guestPhotos
                 ?->map(fn ($photo) => [
                     'id' => $photo->id,
