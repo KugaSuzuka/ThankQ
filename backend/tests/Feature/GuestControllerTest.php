@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Guest;
 use App\Models\GuestPhoto;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\TestResponse;
@@ -32,7 +33,23 @@ class GuestControllerTest extends TestCase
             )
             ->create([
                 'name' => 'レインボーケーキ',
-                'thanks_message' => 'いつもたくさん遊んでくれてありがとう！おかげで韓国旅行最高に楽しかったよ！',
+                'message_from_groom' => 'いつもたくさん遊んでくれてありがとう！おかげで韓国旅行最高に楽しかったよ！',
+                'message_from_bride' => '今度またサウナに行こう！',
+            ]);
+        // 新郎新婦を作成する
+        User::factory()
+            ->count(2)
+            ->sequence(
+                [
+                    'name' => '新郎',
+                    'role' => 'groom',
+                ],
+                [
+                    'name' => '新婦',
+                    'role' => 'bride',
+                ])
+            ->create([
+                'wedding_id' => $guest->wedding_id,
             ]);
         $this->getJson('/api/guests/'.$guest->access_token)
             ->tap(function (TestResponse $response) {
@@ -43,7 +60,16 @@ class GuestControllerTest extends TestCase
                 'data' => [
                     'id' => $guest->id,
                     'name' => $guest->name,
-                    'message' => $guest->thanks_message,
+                    'messages' => [
+                        [
+                            'name' => '新郎',
+                            'message' => $guest->message_from_groom,
+                        ],
+                        [
+                            'name' => '新婦',
+                            'message' => $guest->message_from_bride,
+                        ],
+                    ],
                     'guest_photos' => [
                         [
                             'id' => $guest->guestPhotos[0]->id,

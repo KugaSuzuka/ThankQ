@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Guest;
 use App\Models\User;
+use App\Models\Wedding;
 use Illuminate\Database\Seeder;
 
 class GuestSeeder extends Seeder
@@ -16,6 +17,7 @@ class GuestSeeder extends Seeder
         Guest::factory()
             ->count(10)
             ->recycle(User::all())
+            ->recycle(Wedding::all())
             ->create();
     }
 }

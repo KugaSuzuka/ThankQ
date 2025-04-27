@@ -19,12 +19,14 @@ class DatabaseSeeder extends Seeder
             ->count(2)
             ->recycle(Wedding::all())
             ->sequence([
-                'name' => '藤村和弥',
+                'name' => '新郎',
                 'email' => 'test@example.com',
+                'role' => 'groom',
             ],
                 [
-                    'name' => '久賀鈴香',
+                    'name' => '新婦',
                     'email' => 'test2@example.com',
+                    'role' => 'bride',
                 ]
             )
             ->create([
