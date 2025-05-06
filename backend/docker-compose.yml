@@ -73,6 +73,17 @@ services:
                 - local
             retries: 3
             timeout: 5s
+    minio-reverse-proxy:
+        image: caddy:latest
+        command: caddy reverse-proxy --from http://localhost:9001 --to http://minio:9000 --change-host-header
+        ports:
+            - '${FORWARD_MINIO_REVERSE_PROXY_PORT:-9001}:9001'
+        volumes:
+            - sail-minio-reverse-proxy:/data/caddy
+        networks:
+            - sail
+        depends_on:
+            - minio
 networks:
     sail:
         driver: bridge
@@ -80,3 +91,6 @@ volumes:
     sail-mysql:
         driver: local
     sail-minio:
+        driver: local
+    sail-minio-reverse-proxy:
+        driver: local

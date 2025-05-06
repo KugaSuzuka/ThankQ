@@ -37,6 +37,11 @@ class Guest extends Model
         return $this->hasMany(GuestPhoto::class);
     }
 
+    public function quizAnswers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(QuizAnswer::class);
+    }
+
     public function groom(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(User::class, 'wedding_id', 'wedding_id')

@@ -28,8 +28,8 @@ class QuizAnswer extends Model
         return $this->belongsTo(Guest::class);
     }
 
-    public function quiz(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function quizChoice(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Quiz::class);
+        return $this->belongsTo(QuizChoice::class);
     }
 }
