@@ -5,7 +5,6 @@ namespace App\Filament\Resources\QuizResource\Pages;
 use App\Filament\Resources\QuizResource;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class CreateQuiz extends CreateRecord
 {
@@ -15,6 +14,7 @@ class CreateQuiz extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['wedding_id'] = Auth::user()->wedding_id; // ログインユーザーのwedding_idを設定
+
         return $data;
     }
 }

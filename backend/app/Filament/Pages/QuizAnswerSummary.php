@@ -1,4 +1,5 @@
 <?php
+
 // app/Filament/Pages/QuizAnswerSummary.php
 
 namespace App\Filament\Pages;
@@ -8,16 +9,17 @@ use App\Models\QuizAnswer;
 use Filament\Pages\Page;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Collection;
-use function Aws\map;
 
 class QuizAnswerSummary extends Page implements Tables\Contracts\HasTable
 {
     use Tables\Concerns\InteractsWithTable;
 
     protected static ?string $navigationIcon = 'heroicon-o-question-mark-circle';
+
     protected static string $view = 'filament.pages.quiz-answer-summary';
+
     protected static ?string $navigationLabel = 'クイズ正解集計';
+
     protected static ?string $title = 'クイズ正解集計';
 
     public function table(Tables\Table $table): Tables\Table
@@ -34,7 +36,7 @@ class QuizAnswerSummary extends Page implements Tables\Contracts\HasTable
                     ->label('正解数')
                     ->state(function (Guest $record) {
                         return $record->quizAnswers
-                            ->filter(fn (QuizAnswer $quizAnswer)=> $quizAnswer->quizChoice->is_correct)
+                            ->filter(fn (QuizAnswer $quizAnswer) => $quizAnswer->quizChoice->is_correct)
                             ->count();
                     }),
 
@@ -64,4 +66,3 @@ class QuizAnswerSummary extends Page implements Tables\Contracts\HasTable
             ]);
     }
 }
-

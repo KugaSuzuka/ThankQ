@@ -8,14 +8,12 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class QuizChoicesRelationManager extends RelationManager
 {
     protected static string $relationship = 'quizChoices';
-    protected static ?string $title = '選択肢';
 
+    protected static ?string $title = '選択肢';
 
     public function form(Form $form): Form
     {

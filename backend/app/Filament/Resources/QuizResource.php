@@ -17,8 +17,8 @@ class QuizResource extends Resource
     protected static ?string $model = Quiz::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-question-mark-circle';
-    protected static ?string $modelLabel = 'クイズ';
 
+    protected static ?string $modelLabel = 'クイズ';
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
