@@ -58,6 +58,7 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
             'report' => false,
+            'temporary_url' => env('AWS_S3_TEMPORARY_URL'),
         ],
 
     ],

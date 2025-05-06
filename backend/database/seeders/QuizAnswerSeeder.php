@@ -16,11 +16,14 @@ class QuizAnswerSeeder extends Seeder
     public function run(): void
     {
         Quiz::all()->each(function ($quiz) {
-            QuizAnswer::factory()
-                ->count(Guest::all()->count() + Quiz::all()->count())
-                ->recycle(QuizChoice::all())
-                ->recycle(Guest::all())
-                ->create();
+            Guest::all()
+                ->each(function ($guest) use ($quiz) {
+                    QuizAnswer::factory()
+                        ->create([
+                            'guest_id' => $guest->id,
+                            'quiz_choice_id' => QuizChoice::where('quiz_id', $quiz->id)->inRandomOrder()->first()->id,
+                        ]);
+                });
         });
     }
 }
