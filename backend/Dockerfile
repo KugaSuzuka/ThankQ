@@ -22,7 +22,7 @@ COPY . .
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader
 # アプリケーションコピー
-COPY backend/.env.production .env
+COPY .env.production .env
 
 # Laravel キャッシュ
 RUN php artisan config:cache && \
