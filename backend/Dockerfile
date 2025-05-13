@@ -1,5 +1,5 @@
 # ───────── Dockerfile（修正版）─────────
-FROM php:8.2-fpm
+FROM php:8.3-fpm
 
 # OS パッケージ & PHP 拡張のインストール
 RUN apt-get update && apt-get install -y \
