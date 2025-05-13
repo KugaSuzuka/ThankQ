@@ -1,0 +1,39 @@
+@import './base.css';
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default;
+}
+@plugin "daisyui/theme" {
+  name: "ThankQ";
+  default: true;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: #F2F7F4;
+  --color-base-200: #E2F6ED;
+  --color-base-300: #D8D8D8;
+  --color-base-content: #1F1F1F;
+  --color-primary: #6FBF90;
+  --color-primary-content: #FFFFFF;
+  --color-secondary: #E98EA0;
+  --color-secondary-content: #1F1F1F;
+  --color-accent: #F8CDD5;
+  --color-accent-content: #1F1F1F;
+  --color-neutral: #1F1F1F;
+  --color-neutral-content: #1F1F1F;
+  --color-info: #67C3D6;
+  --color-success: #4CAF50;
+  --color-success-content: #FFFFFF;
+  --color-warning: #F5B971;
+  --color-error: #E53935;
+  --color-error-content: #FFFFFF;
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+  --Dumbo: #D2B48C;
+}
+
