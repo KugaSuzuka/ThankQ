@@ -25,7 +25,7 @@
         <server name="DB_DATABASE" value="laravel"/>
         <server name="DB_USERNAME" value="sail"/>
         <server name="DB_PASSWORD" value="password"/>
-        <server name="DB_HOST" value="127.0.0.1"/>
+        <server name="DB_HOST" value="mysql"/>
         <server name="DB_PORT" value="3306"/>
         <server name="DB_CONNECTION" value="mysql"/>
         <env name="MAIL_MAILER" value="array"/>
