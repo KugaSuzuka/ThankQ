@@ -12,7 +12,8 @@ WORKDIR /var/www
 
 # 依存インストール（キャッシュ狙い）
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-scripts
+RUN composer install --no-dev --no-scripts --optimize-autoloader \
+ && composer dump-autoload -o
 
 # アプリ & .env
 COPY . .
