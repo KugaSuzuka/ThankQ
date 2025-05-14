@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 set -eu
+php artisan route:clear
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
 
 echo "▶︎ Running database migrations…"
 php artisan migrate --force
