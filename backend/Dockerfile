@@ -25,8 +25,7 @@ RUN composer install --no-dev --optimize-autoloader
 COPY .env.production .env
 
 # Laravel キャッシュ
-RUN php artisan config:cache && \
-    php artisan route:cache  && \
+RUN php artisan route:cache  && \
     php artisan view:cache
 
 EXPOSE 80
