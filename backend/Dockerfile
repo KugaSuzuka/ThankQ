@@ -13,6 +13,7 @@ WORKDIR /var/www
 # 依存インストール（キャッシュ狙い）
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader --no-scripts
+RUN composer require --no-interaction --optimize-autoloader fakerphp/faker:^1.25
 
 # アプリ & .env
 COPY . .
@@ -21,7 +22,6 @@ COPY .env.production .env
 RUN rm -f bootstrap/cache/config.php bootstrap/cache/routes.php
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN php artisan vendor:publish --force --tag=livewire:assets \
-RUN composer require --no-interaction --optimize-autoloader fakerphp/faker:^1.25 \
  && php artisan filament:assets
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
