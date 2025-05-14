@@ -13,7 +13,6 @@ WORKDIR /var/www
 # 依存インストール（キャッシュ狙い）
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader --no-scripts
-RUN composer require --no-interaction --optimize-autoloader fakerphp/faker:^1.24
 
 # アプリ & .env
 COPY . .
