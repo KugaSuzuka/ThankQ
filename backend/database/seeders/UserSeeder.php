@@ -13,6 +13,11 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        // 下記のデータが存在している場合は削除する
+        User::query()
+            ->where('email', 'test@example.com')
+            ->orWhere('email', 'test@example.com')
+            ->delete();
         User::factory()
             ->count(2)
             ->for(Wedding::factory()->create())
