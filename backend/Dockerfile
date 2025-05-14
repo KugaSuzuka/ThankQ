@@ -20,9 +20,5 @@ COPY .env.production .env
 # Laravelの古いキャッシュがあっても削除
 RUN rm -f bootstrap/cache/config.php bootstrap/cache/routes.php
 
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
 EXPOSE 80
-
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["php", "-S", "0.0.0.0:80", "-t", "public"]
