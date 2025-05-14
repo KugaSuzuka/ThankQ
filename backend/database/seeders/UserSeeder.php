@@ -15,26 +15,27 @@ class UserSeeder extends Seeder
     {
         // 下記のデータが存在している場合は削除する
         Wedding::truncate();
-        User::query()
-            ->where('email', 'test@example.com')
-            ->orWhere('email', 'test@example.com')
-            ->delete();
-        User::factory()
-            ->count(2)
-            ->for(Wedding::factory()->create())
-            ->sequence([
+        $wedding = Wedding::updateOrCreate([
+            'name' => 'テストウエディング',
+        ]);
+        // updateOrCreateを使用して、データが存在しない場合は新規作成、存在する場合は更新する
+        User::updateOrCreate(
+            ['email' => 'test@example.com'],
+            [
                 'name' => '新郎',
-                'email' => 'test@example.com',
                 'role' => 'groom',
-            ],
-                [
-                    'name' => '新婦',
-                    'email' => 'test2@example.com',
-                    'role' => 'bride',
-                ]
-            )
-            ->create([
                 'password' => bcrypt('password'),
-            ]);
+                'wedding_id' => $wedding->id,
+            ]
+        );
+        User::updateOrCreate(
+            ['email' => 'test2@example.com'],
+            [
+                'name' => '新婦',
+                'role' => 'bride',
+                'password' => bcrypt('password'),
+                'wedding_id' => $wedding->id,
+            ]
+        );
     }
 }
