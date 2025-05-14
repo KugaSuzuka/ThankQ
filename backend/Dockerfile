@@ -17,6 +17,7 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts
 # アプリ & .env
 COPY . .
 COPY .env.production .env
-
+# Laravelの古いキャッシュがあっても削除
+RUN rm -f bootstrap/cache/config.php bootstrap/cache/routes.php
 EXPOSE 80
 CMD ["php", "-S", "0.0.0.0:80", "-t", "public"]

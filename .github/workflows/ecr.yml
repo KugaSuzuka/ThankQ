@@ -32,5 +32,5 @@ jobs:
         run: |
           ECR_URI=$(aws ecr describe-repositories --repository-names $ECR_REPOSITORY \
                     --query 'repositories[0].repositoryUri' --output text)
-          docker build -f backend/Dockerfile -t $ECR_URI:latest backend
+          docker build --no-cache -f backend/Dockerfile -t $ECR_URI:latest backend
           docker push     $ECR_URI:$IMAGE_TAG
