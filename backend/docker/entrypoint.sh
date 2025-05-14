@@ -11,7 +11,6 @@ php artisan migrate --force
 echo "▶︎ Seeding initial data…"
 # Seeder が無い場合は行ごと削除して OK
 php artisan db:seed --class=UserSeeder --force || true
-php artisan vendor:publish --force --tag=livewire:assets
 
 
 echo "▶︎ Starting PHP built-in server"
