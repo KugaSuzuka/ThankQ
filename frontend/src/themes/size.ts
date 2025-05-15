@@ -1,0 +1,5 @@
+export type ThankQSizeType = 'xs'
+| 'sm'
+| 'md'
+| 'lg'
+| 'xl'
