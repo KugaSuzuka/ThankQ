@@ -12,13 +12,13 @@ WORKDIR /var/www
 
 # 依存インストール（キャッシュ狙い）
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --optimize-autoloader \
- && composer dump-autoload -o --no-scripts
+RUN composer install --no-dev --no-scripts --optimize-autoloader
 
 # アプリ & .env
 COPY . .
 COPY .env.production .env
 # Laravelの古いキャッシュがあっても削除
+RUN composer dump-autoload -o
 RUN rm -f bootstrap/cache/config.php bootstrap/cache/routes.php
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN php artisan vendor:publish --force --tag=livewire:assets \
