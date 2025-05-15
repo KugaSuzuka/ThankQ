@@ -22,6 +22,13 @@ class QuizAnswerSummary extends Page implements Tables\Contracts\HasTable
 
     protected static ?string $title = 'クイズ正解集計';
 
+    public static function canAccess(): bool
+    {
+        return true;          // まずは全員許可で動作確認
+        // 本番で制限したい場合はロール等で判定:
+        // return auth()->user()?->role === 'groom';
+    }
+
     public function table(Tables\Table $table): Tables\Table
     {
         return $table
