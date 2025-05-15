@@ -14,7 +14,7 @@ class Quiz extends Model
     use HasFactory;
 
     protected $fillable = [
-        'question_text',
+        'question',
         'wedding_id',
     ];
 
