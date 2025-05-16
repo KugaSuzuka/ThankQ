@@ -3,7 +3,7 @@ name: Deploy frontend to S3
 on:
   push:
     branches: [ main ]
-    paths: [ "frontend/**" ]     # フロントの変更のみトリガ
+#    paths: [ "frontend/**" ]     # フロントの変更のみトリガ
 
 env:
   AWS_REGION: ap-northeast-1
