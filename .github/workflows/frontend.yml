@@ -3,11 +3,11 @@ name: Deploy frontend to S3
 on:
   push:
     branches: [ main ]
-#    paths: [ "frontend/**" ]     # フロントの変更のみトリガ
+#    paths: [ "frontend/**" ]        # フロントに変更があるときだけ
 
 env:
   AWS_REGION: ap-northeast-1
-  DIST_DIR: frontend/dist        # Next.js なら frontend/out
+  DIST_DIR: frontend/dist           # Next.js: frontend/out
   S3_BUCKET: thankq-frontend-site
 
 permissions:
@@ -19,57 +19,55 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # ------------- 0. Checkout ------------------------------------------------
+      # 0) Checkout
       - uses: actions/checkout@v4
 
-      # ------------- 1. ビルド --------------------------------------------------
+      # 1) Node セットアップ（cache と lock ファイルのパスを指定）
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-      - run: |
-          cd frontend
+          cache-dependency-path: frontend/package-lock.json
+
+      # 1.5) 依存インストール & ビルド
+      - name: Build frontend
+        working-directory: frontend            # ← ここ大事
+        run: |
           npm ci
           npm run build
 
-      # ------------- 2. AWS 認証 (OIDC AssumeRole) -----------------------------
+      # 2) AWS (OIDC AssumeRole)
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.CI_FRONTEND_ROLE_ARN }}   # 例: arn:aws:iam::1234:role/ci-frontend-deployer
-          aws-region:        ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.CI_FRONTEND_ROLE_ARN }}
+          aws-region:     ${{ env.AWS_REGION }}
 
-      # ------------- 3. 変数を一回だけ組み立てて共有 ----------------------------
+      # 3) CloudFront ID / バケットパスをまとめて環境変数へ
       - name: Resolve resource IDs
-        id: resolve
         run: |
-          # CloudFront ID を Terraform Output から取得する例
-          CF_ID=$(aws cloudformation describe-stacks \
-                    --stack-name thankq-infra \
-                    --query "Stacks[0].Outputs[?OutputKey=='cf_id'].OutputValue" \
-                    --output text)
-          echo "CLOUDFRONT_ID=$CF_ID" >> "$GITHUB_ENV"
-          echo "SYNC_PATH=s3://${S3_BUCKET}" >> "$GITHUB_ENV"
+          CF_ID=${{ secrets.CLOUDFRONT_ID }}          # 固定値ならこれだけ
+          echo "CLOUDFRONT_ID=$CF_ID" >> $GITHUB_ENV
+          echo "SYNC_PATH=s3://${S3_BUCKET}" >> $GITHUB_ENV
 
-      # ------------- 4. S3 へアップロード ---------------------------------------
-      - name: Upload frontend to S3
+      # 4) S3 sync
+      - name: Upload to S3
         run: |
-          aws s3 sync $DIST_DIR/ $SYNC_PATH \
+          aws s3 sync $DIST_DIR/ "$SYNC_PATH" \
             --delete \
             --cache-control "public,max-age=31536000,immutable"
 
-      # ------------- 5. CloudFront 無効化（任意） -------------------------------
-      - name: Invalidate CloudFront cache
+      # 5) CloudFront Invalidate (任意)
+      - name: Invalidate CloudFront
         if: env.CLOUDFRONT_ID != ''
         run: |
           aws cloudfront create-invalidation \
-            --distribution-id $CLOUDFRONT_ID \
+            --distribution-id "$CLOUDFRONT_ID" \
             --paths "/*"
 
-      # ------------- 6. CDKTF デプロイ（インフラ更新が必要なら） ---------------
+      # 6) CDKTF deploy（必要なら）
       - uses: hashicorp/setup-terraform@v3
-      - name: CDKTF deploy (non-interactive)
-        env:
-          CDKTF_DISABLE_PROMPTS: "true"
+      - name: CDKTF deploy
+        env: { CDKTF_DISABLE_PROMPTS: "true" }
         run: |
           cd cdktf
           npm ci
