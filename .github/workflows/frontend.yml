@@ -39,7 +39,7 @@ jobs:
       - name: Build frontend
         working-directory: frontend
         run: |
-          pnpm install --frozen-lockfile   # lock が v7+ なら --frozen-lockfile 推奨
+          pnpm install --frozen-lockfile
           pnpm run build  
 
       # 2) AWS (OIDC AssumeRole)
