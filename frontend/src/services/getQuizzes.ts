@@ -1,8 +1,9 @@
 import type { QuizResponseType } from "@/models/quiz";
-import { myFetcher, type ResponseType } from "@/utils/myFetcher";
+import { createAPIUrl, myFetcher, type ResponseType } from "@/utils/myFetcher";
 
 export const getQuizzes = async (): Promise<ResponseType<QuizResponseType[]>> => {
-  return await myFetcher(`http://localhost:80/api/quizzes/1`, {
+  const url = createAPIUrl('api/quizzes/1')
+  return await myFetcher(url, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
