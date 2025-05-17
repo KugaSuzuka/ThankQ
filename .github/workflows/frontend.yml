@@ -17,22 +17,24 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
-      # --- Node + pnpm (公式アクション方式=方法B) -----------------------
-      - uses: pnpm/action-setup@v4           # ← ここを削ると Corepack 方式
-        with:
-          version: 10
-          run-install: false
-
+      # 1) Node を先にセットアップ
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: frontend/package.json   # engines.node を参照
           cache: pnpm
           cache-dependency-path: frontend/pnpm-lock.yaml
 
-      # --- 依存インストール & ビルド ------------------------------------
+      # 2) pnpm をインストール
+      - uses: pnpm/action-setup@v4                  # v4 が最新
+        with:
+          package_json_file: frontend/package.json
+          run_install: false                        # 依存は後段で
+
+      # 3) 依存インストール & ビルド（frontend ディレクトリ）
       - name: Build frontend
         working-directory: frontend
         run: |
