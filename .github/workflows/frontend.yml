@@ -37,7 +37,7 @@ jobs:
         working-directory: frontend            # ← ここ大事
         run: |
           corepack enable pnpm
-          pnpm ci
+          pnpm install --frozen-lockfile
           pnpm run build
 
       # 2) AWS (OIDC AssumeRole)
