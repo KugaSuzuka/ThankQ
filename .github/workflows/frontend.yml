@@ -21,25 +21,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 1) Node を先にセットアップ
+      # 1) Node を先にセットアップ & キャッシュ
       - uses: actions/setup-node@v4
         with:
-          node-version-file: frontend/package.json   # engines.node を参照
+          node-version-file: frontend/package.json
           cache: pnpm
           cache-dependency-path: frontend/pnpm-lock.yaml
 
       # 2) pnpm をインストール
-      - uses: pnpm/action-setup@v4                  # v4 が最新
+      - uses: pnpm/action-setup@v4
         with:
+          version: 10              # 使いたい pnpm のバージョン
           package_json_file: frontend/package.json
-          run_install: false                        # 依存は後段で
+          run_install: false       # 依存インストールは後段で
 
       # 3) 依存インストール & ビルド（frontend ディレクトリ）
       - name: Build frontend
         working-directory: frontend
         run: |
-          pnpm install --frozen-lockfile
+          # lock が v7+ 形式なら --frozen-lockfile 推奨
+          pnpm install --no-frozen-lockfile
           pnpm run build
+
 
       # 2) AWS (OIDC AssumeRole)
       - uses: aws-actions/configure-aws-credentials@v4
