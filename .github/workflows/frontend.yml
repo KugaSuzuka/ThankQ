@@ -69,12 +69,3 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id "$CLOUDFRONT_ID" \
             --paths "/*"
-
-      # 6) CDKTF deploy（必要なら）
-      - uses: hashicorp/setup-terraform@v3
-      - name: CDKTF deploy
-        env: { CDKTF_DISABLE_PROMPTS: "true" }
-        run: |
-          cd cdktf
-          pnpm ci
-          pnpm cdktf deploy -auto-approve
