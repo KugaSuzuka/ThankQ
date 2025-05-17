@@ -1,5 +1,5 @@
 import type { QuizChoiceType } from "@/models/quiz";
-import { myFetcher } from "@/utils/myFetcher";
+import { createAPIUrl, myFetcher } from "@/utils/myFetcher";
 
 export interface PostAnswerParamsType {
   quiz_choice_ids: QuizChoiceType['id'][],
@@ -10,7 +10,8 @@ export const postAnswer = async (params: PostAnswerParamsType): Promise<{
   result: boolean,
   message: string
 }> => {
-  return await myFetcher(`http://localhost:80/api/quiz-answers`, {
+  const url = createAPIUrl('api/quiz-answers')
+  return await myFetcher(url, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
