@@ -21,9 +21,6 @@ jobs:
     steps:
       # 0) Checkout
       - uses: actions/checkout@v4
-      # 1.1) pnpm を有効化（Corepack）
-      - name: Enable pnpm
-        run: corepack enable pnpm
 
       # 1) Node セットアップ（cache と lock ファイルのパスを指定）
       - uses: actions/setup-node@v4
@@ -31,6 +28,10 @@ jobs:
           node-version: 20
           cache: pnpm
           cache-dependency-path: frontend/pnpm-lock.yaml
+
+      # 1.1) pnpm を有効化（Corepack）
+      - name: Enable pnpm
+        run: corepack enable pnpm
 
       # 1.5) 依存インストール & ビルド
       - name: Build frontend
