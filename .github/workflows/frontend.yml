@@ -33,8 +33,8 @@ jobs:
       - name: Build frontend
         working-directory: frontend            # ← ここ大事
         run: |
-          npm ci
-          npm run build
+          pnpm ci
+          pnpm run build
 
       # 2) AWS (OIDC AssumeRole)
       - uses: aws-actions/configure-aws-credentials@v4
