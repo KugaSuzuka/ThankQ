@@ -17,14 +17,14 @@ RUN composer install --no-dev --no-scripts --optimize-autoloader
 # アプリ & .env
 COPY . .
 COPY .env.production .env
-# キー生成
-RUN php artisan key:generate --no-interaction
 # Laravelの古いキャッシュがあっても削除
 RUN composer dump-autoload -o
 RUN rm -f bootstrap/cache/config.php bootstrap/cache/routes.php
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN php artisan vendor:publish --force --tag=livewire:assets \
- && php artisan filament:assets
+ && php artisan filament:assets \
+# キー生成
+RUN php artisan key:generate --no-interaction
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 80
