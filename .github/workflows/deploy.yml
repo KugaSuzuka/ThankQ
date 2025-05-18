@@ -143,7 +143,6 @@ jobs:
 
       # --- ここからタスク定義登録 ---
       - name: Register & deploy new task definition
-        needs: build-backend            # 同じジョブ内なら不要
         env:
           CLUSTER:  thankq
           SERVICE:  thankq-svc
