@@ -23,7 +23,7 @@ export const myFetcher = async (
 
 export const createAPIUrl = (path: string) => {
   if (import.meta.env.PROD) {
-    return `https://app.thankq-wedding.com/${path}`
+    return `https://thankq-wedding.com/${path}`
   }
 
   return `http://localhost:80/${path}`;
