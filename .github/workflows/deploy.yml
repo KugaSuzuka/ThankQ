@@ -67,35 +67,17 @@ jobs:
           pnpm install --no-frozen-lockfile           # lock を新形式にしたら --frozen-lockfile
           pnpm run build
 
-      # -- PHP を最小セットアップして Livewire / Filament アセット生成 --
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          tools: composer
-
-      - name: Publish Livewire assets
-        working-directory: backend
-        run: |
-          composer install --no-dev --no-scripts --optimize-autoloader
-          php artisan vendor:publish --force --tag=livewire:assets
-          php artisan filament:assets
-
       # -- AWS 認証 (OIDC) --
       - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.CI_FRONTEND_ROLE_ARN }}
           aws-region:     ${{ env.AWS_REGION }}
 
-      # -- S3 へ同期 (dist と vendor) --
+      # -- S3 へ同期 (dist) --
       - name: Upload to S3
         run: |
           # SPA 本体
           aws s3 sync "$DIST_DIR/" "s3://${S3_BUCKET}" \
-            --delete \
-            --cache-control "public,max-age=31536000,immutable"
-
-          # Livewire / Filament アセット
-          aws s3 sync backend/public/vendor/ "s3://${S3_BUCKET}/vendor/" \
             --delete \
             --cache-control "public,max-age=31536000,immutable"
 
