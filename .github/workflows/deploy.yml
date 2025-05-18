@@ -150,22 +150,29 @@ jobs:
           IMAGE_URI: ${{ steps.build.outputs.ECR_URI }}:${{ steps.build.outputs.IMAGE_TAG }}
         run: |
           sudo apt-get update -qq && sudo apt-get install -y jq
-          
-          # 1) 現行タスク定義を取得
+
           aws ecs describe-task-definition --task-definition $FAMILY \
-            --query 'taskDefinition' > taskdef.json
-          
-          # 2) image を置換して新 revision 登録
-          TMP=$(mktemp)
-          jq --arg IMG "$IMAGE_URI" '.containerDefinitions[0].image=$IMG |
-              del(.taskDefinitionArn,.revision,.status,.requiresAttributes,
-                  .compatibilities,.registeredAt,.registeredBy)' \
-             taskdef.json > $TMP
-          
-          REV_ARN=$(aws ecs register-task-definition --cli-input-json file://$TMP \
-                    --query 'taskDefinition.taskDefinitionArn' --output text)
-          
-          # 3) サービスをローリング更新
+            --query taskDefinition > taskdef.json
+
+          jq --arg IMG "$IMAGE_URI" '
+            {
+              family: .family,
+              executionRoleArn: .executionRoleArn,
+              taskRoleArn: .taskRoleArn,
+              networkMode: .networkMode,
+              requiresCompatibilities: .requiresCompatibilities,
+              cpu: .cpu,
+              memory: .memory,
+              containerDefinitions: (
+                .containerDefinitions
+                | map(if .name == "app" then .image = $IMG else . end)
+              )
+            }' taskdef.json > new-taskdef.json
+
+          REV_ARN=$(aws ecs register-task-definition \
+                      --cli-input-json file://new-taskdef.json \
+                      --query 'taskDefinition.taskDefinitionArn' --output text)
+
           aws ecs update-service \
             --cluster $CLUSTER \
             --service $SERVICE \
