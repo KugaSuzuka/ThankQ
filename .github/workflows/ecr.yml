@@ -36,9 +36,3 @@ jobs:
                     --query 'repositories[0].repositoryUri' --output text)
           docker build --no-cache -f backend/Dockerfile -t $ECR_URI:latest backend
           docker push     $ECR_URI:$IMAGE_TAG
-      - name: Roll ECS Service
-        run: |
-          aws ecs update-service \
-            --cluster thankq \
-            --service thankq-svc \
-            --force-new-deployment

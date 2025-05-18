@@ -17,6 +17,8 @@ RUN composer install --no-dev --no-scripts --optimize-autoloader
 # アプリ & .env
 COPY . .
 COPY .env.production .env
+# キー生成
+RUN php artisan key:generate --no-interaction
 # Laravelの古いキャッシュがあっても削除
 RUN composer dump-autoload -o
 RUN rm -f bootstrap/cache/config.php bootstrap/cache/routes.php
