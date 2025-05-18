@@ -1,0 +1,130 @@
+name: Deploy ThankQ (frontend ⬆ + backend ⬆)
+
+on:
+  push:
+    branches: [ main ]              # main への push ですべて判定
+
+# ---------- 共通設定 ----------
+env:
+  AWS_REGION: ap-northeast-1
+  # ----- Frontend -----
+  DIST_DIR: frontend/dist           # Next.js なら frontend/out
+  S3_BUCKET: thankq-frontend-site
+  # ----- Backend -----
+  ECR_REPOSITORY: thankq-app
+  IMAGE_TAG: latest                 # 「latest」固定運用
+
+permissions:
+  id-token: write                   # OIDC AssumeRole 用
+  contents: read
+
+jobs:
+  # 0) どのフォルダが変更されたかを判定
+  path-filter:
+    runs-on: ubuntu-latest
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend }}
+      backend:  ${{ steps.filter.outputs.backend }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            frontend:
+              - 'frontend/**'
+            backend:
+              - 'backend/**'
+
+  # 1) Frontend ビルド & S3 へデプロイ
+  build-frontend:
+    if: needs.path-filter.outputs.frontend == 'true'
+    needs: path-filter
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # -- pnpm / Node --
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run-install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: frontend/package.json     # または node-version: 20
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      # -- フロントビルド --
+      - name: Build frontend
+        working-directory: frontend
+        run: |
+          pnpm install --no-frozen-lockfile           # lock を新形式にしたら --frozen-lockfile
+          pnpm run build
+
+      # -- PHP を最小セットアップして Livewire / Filament アセット生成 --
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+
+      - name: Publish Livewire assets
+        working-directory: backend
+        run: |
+          composer install --no-dev --no-scripts --optimize-autoloader
+          php artisan vendor:publish --force --tag=livewire:assets
+          php artisan filament:assets
+
+      # -- AWS 認証 (OIDC) --
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.CI_FRONTEND_ROLE_ARN }}
+          aws-region:     ${{ env.AWS_REGION }}
+
+      # -- S3 へ同期 (dist と vendor) --
+      - name: Upload to S3
+        run: |
+          # SPA 本体
+          aws s3 sync "$DIST_DIR/" "s3://${S3_BUCKET}" \
+            --delete \
+            --cache-control "public,max-age=31536000,immutable"
+
+          # Livewire / Filament アセット
+          aws s3 sync backend/public/vendor/ "s3://${S3_BUCKET}/vendor/" \
+            --delete \
+            --cache-control "public,max-age=31536000,immutable"
+
+      # -- CloudFront キャッシュ無効化 (任意) --
+      - name: Invalidate CloudFront
+        if: ${{ secrets.CLOUDFRONT_ID != '' }}
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_ID }} \
+            --paths "/*"
+
+  # 2) Backend ビルド & ECR プッシュ
+  build-backend:
+    if: needs.path-filter.outputs.backend == 'true'
+    needs: path-filter
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # -- AWS 認証 & ECR ログイン --
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region:     ${{ env.AWS_REGION }}
+
+      - uses: aws-actions/amazon-ecr-login@v2
+
+      # -- Docker build / push --
+      - name: Build & push image
+        run: |
+          ECR_URI=$(aws ecr describe-repositories --repository-names $ECR_REPOSITORY \
+                    --query 'repositories[0].repositoryUri' --output text)
+
+          docker build --no-cache -f backend/Dockerfile -t $ECR_URI:${IMAGE_TAG} backend
+          docker push $ECR_URI:${IMAGE_TAG}
