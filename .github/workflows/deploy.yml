@@ -97,7 +97,7 @@ jobs:
 
       # -- CloudFront キャッシュ無効化 (任意) --
       - name: Invalidate CloudFront
-        if: ${{ secrets.CLOUDFRONT_ID != '' }}
+        if: ${{ env.CLOUDFRONT_ID != '' }}
         run: |
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.CLOUDFRONT_ID }} \
