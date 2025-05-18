@@ -132,3 +132,26 @@ jobs:
 
           docker build --no-cache -f backend/Dockerfile -t $ECR_URI:${IMAGE_TAG} backend
           docker push $ECR_URI:${IMAGE_TAG}
+      - name: Register & deploy new task definition
+        env:
+          CLUSTER: thankq
+          SERVICE: thankq-svc
+          FAMILY:  thankq-app
+          IMAGE_URI: ${{ env.ECR_URI }}:${{ env.IMAGE_TAG }}
+        run: |
+          # 1) 既存タスク定義を取得
+          aws ecs describe-task-definition --task-definition $FAMILY \
+            --query 'taskDefinition' > taskdef.json
+      
+          # 2) image を置換して新 revision 登録
+          TMP=$(mktemp)
+          jq --arg IMG "$IMAGE_URI" '.containerDefinitions[0].image = $IMG' taskdef.json > $TMP
+          REV_ARN=$(aws ecs register-task-definition --cli-input-json file://$TMP \
+                    --query 'taskDefinition.taskDefinitionArn' --output text)
+      
+          # 3) サービスをローリング更新
+          aws ecs update-service \
+            --cluster $CLUSTER \
+            --service $SERVICE \
+            --task-definition $REV_ARN \
+            --force-new-deployment
