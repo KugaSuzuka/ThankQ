@@ -13,7 +13,7 @@ env:
   S3_BUCKET: thankq-frontend-site
   # ----- Backend -----
   ECR_REPOSITORY: thankq-app
-  IMAGE_TAG: latest                 # 「latest」固定運用
+  IMAGE_TAG: ${{ github.sha }}               # 「latest」固定運用
 
 permissions:
   id-token: write                   # OIDC AssumeRole 用
@@ -126,55 +126,9 @@ jobs:
 
       # -- Docker build / push --
       - name: Build & push image
-        id: build                        # ← 追加 (outputs 用)
         run: |
-          # 1) リポジトリ URI を取得
           ECR_URI=$(aws ecr describe-repositories --repository-names $ECR_REPOSITORY \
                     --query 'repositories[0].repositoryUri' --output text)
-          
-          # 2) 一意タグを付けてビルド（コミット SHA 推奨）
-          IMAGE_TAG=${{ github.sha }}
-          docker build --no-cache -f backend/Dockerfile -t $ECR_URI:$IMAGE_TAG backend
-          docker push  $ECR_URI:$IMAGE_TAG
-          
-          # 3) 後続ステップへ渡す
-          echo "ECR_URI=$ECR_URI"   >> $GITHUB_OUTPUT
-          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      # --- ここからタスク定義登録 ---
-      - name: Register & deploy new task definition
-        env:
-          CLUSTER:  thankq
-          SERVICE:  thankq-svc
-          FAMILY:   thankq-app
-          IMAGE_URI: ${{ steps.build.outputs.ECR_URI }}:${{ steps.build.outputs.IMAGE_TAG }}
-        run: |
-          sudo apt-get update -qq && sudo apt-get install -y jq
-
-          aws ecs describe-task-definition --task-definition $FAMILY \
-            --query taskDefinition > taskdef.json
-
-          jq --arg IMG "$IMAGE_URI" '
-            {
-              family: .family,
-              executionRoleArn: .executionRoleArn,
-              taskRoleArn: .taskRoleArn,
-              networkMode: .networkMode,
-              requiresCompatibilities: .requiresCompatibilities,
-              cpu: .cpu,
-              memory: .memory,
-              containerDefinitions: (
-                .containerDefinitions
-                | map(if .name == "app" then .image = $IMG else . end)
-              )
-            }' taskdef.json > new-taskdef.json
-
-          REV_ARN=$(aws ecs register-task-definition \
-                      --cli-input-json file://new-taskdef.json \
-                      --query 'taskDefinition.taskDefinitionArn' --output text)
-
-          aws ecs update-service \
-            --cluster $CLUSTER \
-            --service $SERVICE \
-            --task-definition $REV_ARN \
-            --force-new-deployment
+          docker build --no-cache -f backend/Dockerfile -t $ECR_URI:${IMAGE_TAG} backend
+          docker push $ECR_URI:${IMAGE_TAG}
