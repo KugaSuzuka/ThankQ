@@ -72,38 +72,24 @@ jobs:
         with:
           role-to-assume: ${{ secrets.CI_FRONTEND_ROLE_ARN }}
           aws-region:     ${{ env.AWS_REGION }}
-
-#      # -- S3 へ同期 (dist) --
-#      - name: Upload to S3
-#        run: |
-#          # SPA 本体
-#          aws s3 sync "$DIST_DIR/" "s3://${S3_BUCKET}" \
-#            --delete \
-#            --cache-control "public,max-age=31536000,immutable"
-
-      - name: Debug - list build output             # ★ 追加
+      # 3) CloudFront ID / バケットパスをまとめて環境変数へ
+      - name: Resolve resource IDs
         run: |
-          echo "=== frontend ディレクトリ ==="
-          ls -R frontend | head -n 200
-          echo "=== dist (out) の中身 ==="
-          ls -R "$DIST_DIR" | head -n 200
-          # -- CloudFront キャッシュ無効化 (任意) --
-          - name: Invalidate CloudFront
-            if: ${{ env.CLOUDFRONT_ID != '' }}
-            run: |
-              aws cloudfront create-invalidation \
-                --distribution-id ${{ secrets.CLOUDFRONT_ID }} \
-                --paths "/*"
+          CF_ID=${{ secrets.CLOUDFRONT_ID }}          # 固定値ならこれだけ
+          echo "CLOUDFRONT_ID=$CF_ID" >> $GITHUB_ENV
+          echo "SYNC_PATH=s3://${S3_BUCKET}" >> $GITHUB_ENV
       # -- S3 へ同期 (dist) --
       - name: Upload to S3
         run: |
-          if [ ! -d "$DIST_DIR" ]; then
-            echo "::error::Build output directory '$DIST_DIR' not found"
-            exit 1
-          fi
-          aws s3 sync "$DIST_DIR/" "s3://${S3_BUCKET}" --delete \
+          aws s3 sync $DIST_DIR/ "$SYNC_PATH" \
+            --delete \
             --cache-control "public,max-age=31536000,immutable"
-
+      - name: Invalidate CloudFront
+        if: env.CLOUDFRONT_ID != ''
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "$CLOUDFRONT_ID" \
+            --paths "/*"
   # 2) Backend ビルド & ECR プッシュ
   build-backend:
     if: needs.path-filter.outputs.backend == 'true'
