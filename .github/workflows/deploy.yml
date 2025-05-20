@@ -106,7 +106,7 @@ jobs:
 
   # 2) Backend ビルド & ECR プッシュ
   build-backend:
-#    if: needs.path-filter.outputs.backend == 'true'
+    if: needs.path-filter.outputs.backend == 'true'
     needs: path-filter
     runs-on: ubuntu-latest
 
