@@ -14,6 +14,7 @@ env:
   # ----- Backend -----
   ECR_REPOSITORY: thankq-app
   IMAGE_TAG: ${{ github.sha }}               # 「latest」固定運用
+  CLOUDFRONT_ID: EZ1HWPKSWNR15
 
 permissions:
   id-token: write                   # OIDC AssumeRole 用
@@ -48,7 +49,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # -- pnpm / Node --
       - uses: pnpm/action-setup@v4
         with:
           version: 10
@@ -56,40 +56,34 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version-file: frontend/package.json     # または node-version: 20
+          node-version: frontend/package.json
           cache: pnpm
           cache-dependency-path: frontend/pnpm-lock.yaml
 
-      # -- フロントビルド --
       - name: Build frontend
         working-directory: frontend
         run: |
-          pnpm install --no-frozen-lockfile           # lock を新形式にしたら --frozen-lockfile
+          pnpm install --no-frozen-lockfile
           pnpm run build
 
-      # -- AWS 認証 (OIDC) --
       - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.CI_FRONTEND_ROLE_ARN }}
           aws-region:     ${{ env.AWS_REGION }}
-      # 3) CloudFront ID / バケットパスをまとめて環境変数へ
-      - name: Resolve resource IDs
-        run: |
-          CF_ID=${{ secrets.CLOUDFRONT_ID }}          # 固定値ならこれだけ
-          echo "CLOUDFRONT_ID=$CF_ID" >> $GITHUB_ENV
-          echo "SYNC_PATH=s3://${S3_BUCKET}" >> $GITHUB_ENV
-      # -- S3 へ同期 (dist) --
+
       - name: Upload to S3
         run: |
-          aws s3 sync $DIST_DIR/ "$SYNC_PATH" \
+          echo "DIST_DIR=$DIST_DIR  S3_BUCKET=$S3_BUCKET"
+          aws s3 sync "$DIST_DIR/" "s3://$S3_BUCKET" \
             --delete \
-            --cache-control "public,max-age=31536000,immutable"
+            --cache-control "public,max-age=31536000,immutable" \
+            --exclude ".DS_Store" --exclude "._*" --exclude ".*.swp"
+
       - name: Invalidate CloudFront
-        if: env.CLOUDFRONT_ID != ''
         run: |
           aws cloudfront create-invalidation \
             --distribution-id "$CLOUDFRONT_ID" \
-            --paths "/*"
+            --paths "/index.html" "/assets/*"
   # 2) Backend ビルド & ECR プッシュ
   build-backend:
     if: needs.path-filter.outputs.backend == 'true'
