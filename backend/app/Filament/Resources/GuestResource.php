@@ -65,6 +65,8 @@ class GuestResource extends Resource
                     ->label('新郎からのメッセージ'),
                 Tables\Columns\TextColumn::make('message_from_bride')
                     ->label('新婦からのメッセージ'),
+                Tables\Columns\TextColumn::make('access_token')
+                    ->label('アクセストークン'),
             ])
             ->filters([
                 //
