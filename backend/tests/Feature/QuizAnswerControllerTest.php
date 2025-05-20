@@ -44,7 +44,7 @@ class QuizAnswerControllerTest extends TestCase
             ->create();
         $postData = [
             'quiz_choice_ids' => [
-                $quiz->map(fn (Quiz $quiz) => $quiz->quizChoices()->inRandomOrder()->first()->id)->toArray(),
+                $quiz->map(fn (Quiz $quiz) => $quiz->quizChoices->first()->id)->toArray(),
             ],
             'guest_id' => $guest->id,
         ];
@@ -62,5 +62,28 @@ class QuizAnswerControllerTest extends TestCase
                 'guest_id' => $guest->id,
             ]);
         $this->assertDatabaseCount('quiz_answers', 4);
+
+        // すでに回答済みの場合はスキップされることを確認
+        $postData = [
+            'quiz_choice_ids' => [
+                $quiz->map(fn (Quiz $quiz) => $quiz->quizChoices->last()->id)->toArray(),
+            ],
+            'guest_id' => $guest->id,
+        ];
+        $this->postJson('/api/quiz-answers', $postData)
+            ->assertOk()
+            ->tap(function ($response) {
+                // echo __METHOD__.'()#L'.__LINE__.':'.json_encode($response->json('data'), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL;
+            })
+            ->assertJson([
+                'result' => true,
+                'message' => '回答が登録されました！',
+            ]);
+        // すでに回答済みの場合はスキップされることを確認
+        $this->assertDatabaseHas('quiz_answers', [
+            'guest_id' => $guest->id,
+            'quiz_choice_id' => $quiz->first()->quizChoices->first()->id,
+        ]);
+
     }
 }

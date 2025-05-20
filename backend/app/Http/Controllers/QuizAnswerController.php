@@ -15,10 +15,20 @@ class QuizAnswerController extends Controller
             DB::transaction(function () use ($request) {
                 collect(request()->input('quiz_choice_ids'))
                     ->flatten()
-                    ->each(fn (int $quizChoiceId) => QuizAnswer::create([
-                        'guest_id' => $request->input('guest_id'),
-                        'quiz_choice_id' => $quizChoiceId,
-                    ]));
+                    ->each(function (int $quizChoiceId) use ($request) {
+
+                        // すでに回答済みの場合はスキップ
+                        if (QuizAnswer::where('guest_id', $request->input('guest_id'))
+                            ->whereHas('quizChoice', fn ($query) => $query->where('id', $quizChoiceId))
+                            ->exists()) {
+                            return;
+                        } else {
+                            QuizAnswer::create([
+                                'guest_id' => $request->input('guest_id'),
+                                'quiz_choice_id' => $quizChoiceId,
+                            ]);
+                        }
+                    });
             });
 
             return response()->json([
