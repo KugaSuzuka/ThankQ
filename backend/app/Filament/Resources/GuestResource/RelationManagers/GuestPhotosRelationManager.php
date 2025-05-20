@@ -28,7 +28,7 @@ class GuestPhotosRelationManager extends RelationManager
                     ->openable()
                     ->downloadable()
                     ->preserveFilenames()
-                    ->visible('private')
+                    ->visibility('private')
                     // 3MG
                     ->maxSize(3 * 1024)
                     ->required(),
