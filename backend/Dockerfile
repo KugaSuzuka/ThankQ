@@ -6,6 +6,8 @@ RUN apt-get update && apt-get install -y \
  && docker-php-ext-install pdo_mysql mbstring zip bcmath intl \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get install -y default-mysql-client
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
