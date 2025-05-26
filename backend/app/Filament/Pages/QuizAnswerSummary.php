@@ -70,6 +70,10 @@ class QuizAnswerSummary extends Page implements Tables\Contracts\HasTable
                 TextColumn::make('quizAnswers.4.quizChoice.is_correct')
                     ->label('5問目')
                     ->formatStateUsing(fn ($state) => $state ? '○' : '✕'),
+                // 6問目
+                TextColumn::make('quizAnswers.5.quizChoice.is_correct')
+                    ->label('6問目')
+                    ->formatStateUsing(fn ($state) => $state ? '○' : '✕'),
             ]);
     }
 }
