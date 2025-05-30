@@ -91,7 +91,7 @@ onMounted(async () => {
       </div>
       <MessageRowTitle v-if="to">
         <TypeWriter
-          :text="`${to}へ`"
+          :text="`${to} 様`"
           :type-speed="10"
           @finish="onFinish"
         />
