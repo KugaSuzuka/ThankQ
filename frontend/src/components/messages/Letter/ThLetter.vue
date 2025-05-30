@@ -6,6 +6,7 @@ import MessageRowFrom from '../MessageRow/MessageRowFrom.vue';
 import MessageRowTitle from '../MessageRow/MessageRowTitle.vue';
 import TypeWriter from '../TypeWriter/TypeWriter.vue';
 import type { ThLetterProps } from './Type';
+import BaseText from '@/components/Common/BaseText/BaseText.vue';
 
 const props = defineProps<ThLetterProps>();
 const emits = defineEmits<{
@@ -36,6 +37,13 @@ const skeleton = computed(() => {
 const isShowFrom = computed(() => {
   return typingIndex.value === lines.value.length
 })
+
+const dear = computed(() => {
+  if (!props.to) {
+    return '親愛なるあなた 様';
+  }
+  return `${props.to} 様`;
+});
 
 function onFinish() {
   _addIndex();
@@ -90,8 +98,12 @@ onMounted(async () => {
         >
       </div>
       <MessageRowTitle v-if="to">
+        <span v-if="noAnimation">
+          {{ dear }}
+        </span>
         <TypeWriter
-          :text="`${to} 様`"
+          v-else
+          :text="dear"
           :type-speed="10"
           @finish="onFinish"
         />
@@ -100,19 +112,29 @@ onMounted(async () => {
         v-for="line, index in lines"
         :key="index"
       >
-        <TypeWriter
-          v-if="isShowRow(index)"
-          :text="line"
-          :type-speed="1"
-          @finish="onFinish"
-        />
+        <BaseText v-if="noAnimation">
+          {{ line }}
+        </BaseText>
+        <template v-else>
+          <TypeWriter
+            v-if="isShowRow(index)"
+            :text="line"
+            :type-speed="1"
+            @finish="onFinish"
+          />
+        </template>
       </MessageRowBody>
       <MessageRowFrom>
-        <TypeWriter
-          v-if="isShowFrom"
-          :text="from"
-          @finish="emits('draw')"
-        />
+        <BaseText v-if="noAnimation">
+          {{ from }}
+        </BaseText>
+        <template v-else>
+          <TypeWriter
+            v-if="isShowFrom"
+            :text="from"
+            @finish="emits('draw')"
+          />
+        </template>
       </MessageRowFrom>
       <MessageRow />
     </template>

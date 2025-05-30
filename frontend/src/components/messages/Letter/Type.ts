@@ -3,4 +3,5 @@ export interface ThLetterProps {
   body: string,
   from: string,
   isLoading?: boolean
+  noAnimation?: boolean
 };

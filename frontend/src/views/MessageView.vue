@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import BaseBtn from '@/components/Common/BaseBtn/BaseBtn.vue';
 import BaseCarousel from '@/components/Common/BaseCarousel/BaseCarousel.vue';
 import BaseSection from '@/components/Common/BaseSection.vue';
 import ThLetter from '@/components/messages/Letter/ThLetter.vue';
@@ -9,6 +10,7 @@ const store = useGuestStore();
 const { isLoading } = useGuest();
 const isShown = ref(false)
 const currentIndex = ref(0);
+const noTypingAnimation = ref(false);
 
 
 const messageList = computed(() => {
@@ -30,12 +32,34 @@ function onDraw() {
   currentIndex.value = currentIndex.value + 1
 }
 
-setTimeout(() => {
-  isShown.value = true;
-}, 100)
+function init() {
+  setTimeout(() => {
+    isShown.value = true;
+  }, 100)
+}
+
+function onClickSkip() {
+  noTypingAnimation.value = true;
+}
+
+init()
 </script>
 
 <template>
+  <Teleport to="#global-header">
+    <div class="flex justify-end">
+      <BaseBtn
+        class="opacity-50"
+        color="info"
+        size="xs"
+        variant="outline"
+        @click="onClickSkip"
+      >
+        <span class="text-xs">スキップ</span>
+      </BaseBtn>
+    </div>
+  </Teleport>
+
   <Transition name="fade-only">
     <BaseSection
       v-if="isShown"
@@ -50,6 +74,7 @@ setTimeout(() => {
           :body="item.message"
           :from="item.name"
           :is-loading
+          :no-animation="noTypingAnimation"
           :to="index === 0 ? store.guest?.name : ''"
           @draw="onDraw"
         />

@@ -22,12 +22,17 @@ async function onHome() {
 </script>
 
 <template>
-  <header class="navbar bg-base-100 shadow-sm z-1">
+  <header class="navbar bg-base-100 shadow-sm z-1 flex pr-6">
     <a
       class="btn btn-ghost text-xl"
       @click="onHome"
     >
       ThankQ
     </a>
+
+    <div
+      id="global-header"
+      class="flex-grow-1"
+    />
   </header>
 </template>
