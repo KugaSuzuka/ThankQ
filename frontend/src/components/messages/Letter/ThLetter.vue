@@ -18,7 +18,7 @@ const lines = ref<string[]>([])
 const letterRef = useTemplateRef('letter');
 
 const perLine = computed(() => {
-  const CHAR_WIDTH = 19;
+  const CHAR_WIDTH = 20;
   const ROW_PADDING_X = 64
   const _width = letterRef.value?.offsetWidth
   if (_width) {
