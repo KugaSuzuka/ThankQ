@@ -97,7 +97,9 @@ watch(currentQuiz, () => {
 <template>
   <BaseSection
     ref="baseSection"
+    v-motion-slide-visible-once-top
     class="flex flex-col"
+    :duration="500"
   >
     <BaseStack
       component="div"
