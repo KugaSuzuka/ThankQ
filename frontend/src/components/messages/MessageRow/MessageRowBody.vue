@@ -8,7 +8,7 @@ import MessageRow from './MessageRow.vue';
 
 <template>
   <MessageRow>
-    <p>
+    <p class="text-lg font-semibold">
       <slot />
     </p>
   </MessageRow>

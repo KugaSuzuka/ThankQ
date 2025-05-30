@@ -63,6 +63,17 @@ function init() {
   }
 }
 
+
+const stop = watch(() => {
+  return props.noAnimation
+}, async (newNoAnimation) => {
+  if (newNoAnimation) {
+    await nextTick();
+    emits('draw')
+    stop()
+  }
+});
+
 init();
 
 onMounted(async () => {
@@ -115,16 +126,14 @@ onMounted(async () => {
         v-for="line, index in lines"
         :key="index"
       >
-        <BaseText
+        <span
           v-if="noAnimation"
-          class="text-lg"
         >
           {{ line }}
-        </BaseText>
+        </span>
         <template v-else>
           <TypeWriter
             v-if="isShowRow(index)"
-            class="text-lg"
             :text="line"
             :type-speed="1"
             @finish="onFinish"

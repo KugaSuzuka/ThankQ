@@ -6,7 +6,7 @@
 <template>
   <div
     class="tracking-wide text-base message-row min-h-15 px-8 flex items-center
-    border-b-1 border-dotted border-grey"
+    border-b-1 border-dotted border-grey font-semibold"
   >
     <slot />
   </div>
@@ -15,7 +15,6 @@
 <style scoped>
 .message-row {
   font-family: 'Zen Kurenaido', sans-serif;
-  font-weight: 500;
   color: #121212;
 }
 </style>
