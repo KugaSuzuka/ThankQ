@@ -15,5 +15,7 @@
 <style scoped>
 .message-row {
   font-family: 'Zen Kurenaido', sans-serif;
+  font-weight: 500;
+  color: #121212;
 }
 </style>

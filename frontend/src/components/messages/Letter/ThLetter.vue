@@ -18,7 +18,7 @@ const lines = ref<string[]>([])
 const letterRef = useTemplateRef('letter');
 
 const perLine = computed(() => {
-  const CHAR_WIDTH = 18;
+  const CHAR_WIDTH = 19;
   const ROW_PADDING_X = 64
   const _width = letterRef.value?.offsetWidth
   if (_width) {
@@ -97,7 +97,10 @@ onMounted(async () => {
           width="90"
         >
       </div>
-      <MessageRowTitle v-if="to">
+      <MessageRowTitle
+        v-if="to"
+        class="text-xl"
+      >
         <span v-if="noAnimation">
           {{ dear }}
         </span>
@@ -112,12 +115,16 @@ onMounted(async () => {
         v-for="line, index in lines"
         :key="index"
       >
-        <BaseText v-if="noAnimation">
+        <BaseText
+          v-if="noAnimation"
+          class="text-lg"
+        >
           {{ line }}
         </BaseText>
         <template v-else>
           <TypeWriter
             v-if="isShowRow(index)"
+            class="text-lg"
             :text="line"
             :type-speed="1"
             @finish="onFinish"
