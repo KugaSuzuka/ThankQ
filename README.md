@@ -30,6 +30,7 @@ cd ThankQ
 
 # Laravel セットアップ
 cp .env.example .env
+sh composer-install.sh
 ./vendor/bin/sail up -d
 ./vendor/bin/sail composer install
 ./vendor/bin/sail artisan key:generate
