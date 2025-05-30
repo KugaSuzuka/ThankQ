@@ -34,10 +34,13 @@ const { status } = useQuiz();
         >
           クイズターイム！
         </BaseHeading>
-        <BaseCenter component="div" class="items-center">
+        <BaseCenter
+          class="items-center"
+          component="div"
+        >
           <BaseText
-            class="w-fit"
             v-motion
+            class="w-fit"
             :delay="100"
             :duration="1000"
             :enter="{ opacity: 1, y: 0, scale: 1 }"
