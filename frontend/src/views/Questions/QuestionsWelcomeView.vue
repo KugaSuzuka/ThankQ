@@ -14,11 +14,11 @@ const { status } = useQuiz();
   <BaseSection
     v-motion-pop-visible
     class="h-full p-6 flex flex-col gap-4"
-    :duration="800"
+    :duration="500"
   >
     <div class="flex flex-col align-center flex-grow-1 justify-center gap-2">
       <BaseCenter
-        class="items-center h-52"
+        class="items-center h-61"
         component="div"
       >
         <img
@@ -27,25 +27,30 @@ const { status } = useQuiz();
         >
       </BaseCenter>
 
-      <BaseHeading
-        class="text-center py-5"
-        tag="h1"
-      >
-        クイズターイム！
-      </BaseHeading>
-      <BaseText
-        v-motion
-        :delay="500"
-        :duration="1000"
-        :enter="{ opacity: 1, y: 0, scale: 1 }"
-        :initial="{ opacity: 0, y: 100 }"
-        :variants="{ custom: { scale: 2 } }"
-      >
-        新郎新婦に関するクイズを出題します！<br>
-        上位の方にはプレゼントを用意しています☺️<br>
-        結果は披露宴の後半に発表！！<br>
-        お早めのご回答をお願いします😊
-      </BaseText>
+      <div>
+        <BaseHeading
+          class="text-center py-5"
+          tag="h1"
+        >
+          クイズターイム！
+        </BaseHeading>
+        <BaseCenter component="div" class="items-center">
+          <BaseText
+            class="w-fit"
+            v-motion
+            :delay="100"
+            :duration="1000"
+            :enter="{ opacity: 1, y: 0, scale: 1 }"
+            :initial="{ opacity: 0, y: 100 }"
+            :variants="{ custom: { scale: 2 } }"
+          >
+            新郎新婦に関するクイズを出題します！<br>
+            上位の方にはプレゼントを用意しています☺️<br>
+            結果は披露宴の後半に発表！！<br>
+            お早めのご回答をお願いします😊
+          </BaseText>
+        </BaseCenter>
+      </div>
     </div>
 
     <BaseBtn
@@ -65,7 +70,7 @@ const { status } = useQuiz();
       size="xl"
       @click="$router.push({name: 'questionConfirmPage'})"
     >
-      回答を確認する
+     自分の回答を見る
     </BaseBtn>
   </BaseSection>
 </template>

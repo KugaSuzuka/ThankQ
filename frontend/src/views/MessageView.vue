@@ -49,7 +49,6 @@ init()
   <Teleport to="#global-header">
     <div class="flex justify-end">
       <BaseBtn
-        class="opacity-50"
         color="info"
         size="xs"
         variant="outline"
