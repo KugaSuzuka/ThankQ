@@ -10,6 +10,12 @@ const { isLoading } = useGuest();
 const isShown = ref(false)
 const currentIndex = ref(0);
 
+
+const messageList = computed(() => {
+  return store.guest?.messages.filter((item) => {
+    return !!item.message
+  })
+})
 const imgList = computed(() => {
   return store.guest?.guest_photos.map((item) => {
     return { url: item.photo_path }
@@ -36,7 +42,7 @@ setTimeout(() => {
       class="h-full p-6 flex flex-col gap-4"
     >
       <div
-        v-for="item, index in store.guest?.messages"
+        v-for="item, index in messageList"
         :key="index"
       >
         <ThLetter

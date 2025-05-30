@@ -12,37 +12,45 @@ const { status } = useQuiz();
 
 <template>
   <BaseSection
+    v-motion-pop-visible
     class="h-full p-6 flex flex-col gap-4"
+    :duration="800"
   >
     <div class="flex flex-col align-center flex-grow-1 justify-center gap-2">
       <BaseCenter
-        class="items-center"
+        class="items-center h-52"
         component="div"
       >
-        <div>
-          <img
-            alt="クイズを連想させる画像"
-            :src="getImagePath('welcomeImage')"
-          >
-        </div>
+        <img
+          alt="クイズを連想させる画像"
+          :src="getImagePath('welcomeImage')"
+        >
       </BaseCenter>
 
       <BaseHeading
         class="text-center py-5"
         tag="h1"
       >
-        クイズを出題します！
+        クイズターイム！
       </BaseHeading>
-      <BaseText>
+      <BaseText
+        v-motion
+        :delay="500"
+        :duration="1000"
+        :enter="{ opacity: 1, y: 0, scale: 1 }"
+        :initial="{ opacity: 0, y: 100 }"
+        :variants="{ custom: { scale: 2 } }"
+      >
         新郎新婦に関するクイズを出題します！<br>
         上位の方にはプレゼントを用意しています☺️<br>
-        結果は披露宴の後半に発表します！！<br>
+        結果は披露宴の後半に発表！！<br>
         お早めのご回答をお願いします😊
       </BaseText>
     </div>
 
     <BaseBtn
       v-if="status !== 'done'"
+      v-motion
       color="primary"
       size="xl"
       @click="$router.push({name: 'questionAnswerPage', params: {
@@ -61,5 +69,4 @@ const { status } = useQuiz();
     </BaseBtn>
   </BaseSection>
 </template>
-
 
