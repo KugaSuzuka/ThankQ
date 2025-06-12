@@ -37,16 +37,16 @@ onMounted(() => {
 
   setTimeout(() => {
     showTitle.value = true
-  }, 4000)
+  }, 2000)
 
   setTimeout(() => {
     showTitle.value = false
     // showMail.value = true;
-  }, 6000);
+  }, 4000);
 
   setTimeout(() => {
     showMail.value = true
-  }, 6500);
+  }, 4500);
 })
 </script>
 

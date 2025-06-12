@@ -11,7 +11,7 @@
           2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09
           C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5
           c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-      fill="red"
+      :fill="colors[Math.floor(Math.random() * colors.length)]"
     />
   </svg>
 </template>
@@ -19,8 +19,9 @@
 <script setup lang="ts">
 import gsap from 'gsap'
 
-const NUM_HEARTS = 150
+const NUM_HEARTS = 50
 const hearts = Array.from({ length: NUM_HEARTS })
+const colors = ['#F18DAE', '#FDE6EC', '#E98EA0']
 
 const heartRefs = ref<SVGSVGElement[]>([])
 
@@ -41,28 +42,26 @@ onMounted(() => {
     y: () => Math.random() * (window.innerHeight - 48),
     opacity: 1,
     scale: () => 0.5 + Math.random() * 0.5,
-    duration: 1.5,
+    duration: 2.0,
     ease: 'power2.out',
     stagger: 0.02,
   })
 
   setTimeout(() => {
     gsap.to(heartRefs.value, {
-      x: window.innerWidth / 2,
-      y: window.innerHeight / 2,
       opacity: 0,
-      duration: 2,
+      duration: 1.5,
       ease: 'power2.out',
       stagger: 0.01,
     })
-  }, 2000)
+  }, 1200)
 })
 </script>
 
 <style scoped>
 .heart {
   position: absolute;
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
 }
 </style>
