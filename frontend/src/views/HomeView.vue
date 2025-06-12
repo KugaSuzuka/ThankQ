@@ -5,6 +5,7 @@ import BaseHeading from '@/components/Common/BaseHeading/BaseHeading.vue';
 import BaseLink from '@/components/Common/BaseLink/BaseLink.vue';
 import BaseSection from '@/components/Common/BaseSection.vue';
 import WaveText from '@/components/Common/WaveText/WaveText.vue';
+import ThHearts from '@/components/Splash/ThHearts.vue';
 import { useGuest } from '@/composables/useGuest';
 import { useGuestStore } from '@/stores/guestStore';
 import { getImagePath } from '@/utils/assetsPath';
@@ -13,6 +14,7 @@ import { ref } from "vue";
 
 const showMail = ref(false)
 const showTitle = ref(false)
+const showHearts = ref(false)
 const { isLoading } = useGuest();
 const store = useGuestStore();
 const router = useRouter()
@@ -30,21 +32,26 @@ function onClick() {
   }, 500);
 }
 
-setTimeout(() => {
-  // showMail.value = true;
-  showTitle.value = true
-}, 300)
+onMounted(() => {
+  showHearts.value = true
 
-setTimeout(() => {
-  showTitle.value = false
-}, 2300);
+  setTimeout(() => {
+    showTitle.value = true
+  }, 2000)
 
-setTimeout(() => {
-  showMail.value = true
-}, 3000);
+  setTimeout(() => {
+    showTitle.value = false
+    // showMail.value = true;
+  }, 4000);
+
+  setTimeout(() => {
+    showMail.value = true
+  }, 4500);
+})
 </script>
 
 <template>
+  <ThHearts />
   <Transition name="fade-only">
     <BaseSection
       v-if="showMail && !isLoading"
@@ -89,7 +96,7 @@ setTimeout(() => {
       grow
     >
       <BaseHeading
-        class="text-center"
+        class="text-center text-4xl"
         tag="h1"
       >
         ThankQ

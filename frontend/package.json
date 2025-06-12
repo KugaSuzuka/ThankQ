@@ -17,6 +17,7 @@
     "@vueuse/core": "^13.1.0",
     "@vueuse/motion": "^3.0.3",
     "dayjs": "^1.11.13",
+    "gsap": "^3.13.0",
     "material-icons": "^1.13.14",
     "pinia": "^3.0.1",
     "tailwindcss": "^4.0.17",
