@@ -4,4 +4,5 @@ export interface BaseDialogProps {
   modalClass?: string
   contentClass?: string
   noHFull?: boolean
+  closeIcon?: boolean
 };
