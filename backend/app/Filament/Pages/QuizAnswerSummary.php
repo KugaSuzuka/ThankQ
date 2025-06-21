@@ -56,7 +56,7 @@ class QuizAnswerSummary extends Page implements Tables\Contracts\HasTable
                         $correctCount = $record->quizAnswers
                             ->filter(fn (QuizAnswer $quizAnswer) => $quizAnswer->quizChoice->is_correct)
                             ->count();
-                        
+
                         // 全ユーザーの正解数を取得して順位を判定
                         $allCorrectCounts = Guest::with('quizAnswers.quizChoice')
                             ->get()
@@ -68,10 +68,10 @@ class QuizAnswerSummary extends Page implements Tables\Contracts\HasTable
                             ->sortDesc()
                             ->unique()
                             ->values();
-                        
+
                         $rank = $allCorrectCounts->search($correctCount) + 1;
-                        
-                        return match($rank) {
+
+                        return match ($rank) {
                             1 => 'warning', // 1位：金色
                             2 => 'gray',    // 2位：銀色
                             3 => 'danger',  // 3位：銅色
