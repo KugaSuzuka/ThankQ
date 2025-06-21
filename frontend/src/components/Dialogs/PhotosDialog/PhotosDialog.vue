@@ -12,7 +12,7 @@ const instaxList = useTemplateRef('instax-list');
 onMounted(async () => {
   await nextTick();
   instaxList.value?.[props.currentIndex]?.$el.scrollIntoView({
-    behavior: 'smooth',
+    behavior: 'instant',
   });
 });
 
@@ -27,10 +27,8 @@ onMounted(async () => {
     no-h-full
   >
     <BaseStack
-      v-motion-fade-visible
       class="justify-center modal-backdrop"
       component="div"
-      :duration="800"
       gap="md"
       grow
     >
