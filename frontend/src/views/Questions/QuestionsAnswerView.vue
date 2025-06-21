@@ -3,7 +3,7 @@ import BaseBtn from '@/components/Common/BaseBtn/BaseBtn.vue';
 import BaseCenter from '@/components/Common/BaseCenter/BaseCenter.vue';
 import BaseHeading from '@/components/Common/BaseHeading/BaseHeading.vue';
 import BaseRadioGroup from '@/components/Common/BaseRadioGroup/BaseRadioGroup.vue';
-import BaseSection from '@/components/Common/BaseSection.vue';
+import BaseSection from '@/components/Common/BaseSection/BaseSection.vue';
 import BaseStack from '@/components/Common/BaseStack/BaseStack.vue';
 import BaseStepper from '@/components/Common/BaseStepper/BaseStepper.vue';
 import { useQuiz } from '@/composables/useQuiz';

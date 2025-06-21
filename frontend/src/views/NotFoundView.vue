@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseBtn from '@/components/Common/BaseBtn/BaseBtn.vue';
 import BaseHeading from '@/components/Common/BaseHeading/BaseHeading.vue';
-import BaseSection from '@/components/Common/BaseSection.vue';
+import BaseSection from '@/components/Common/BaseSection/BaseSection.vue';
 import BaseStack from '@/components/Common/BaseStack/BaseStack.vue';
 import BaseText from '@/components/Common/BaseText/BaseText.vue';
 import InvaderGame from '@/components/InvaderGame/InvaderGame.vue';
