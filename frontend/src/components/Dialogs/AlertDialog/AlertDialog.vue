@@ -31,7 +31,7 @@ function close() {
 
     <BaseText
       v-if="typeof body === 'string'"
-      class="w-full break-words whitespace-normal whitespace-pre"
+      class="w-full break-words whitespace-normal whitespace-pre my-6"
     >
       {{ body }}
     </BaseText>
