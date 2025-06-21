@@ -62,8 +62,8 @@ watch(errorMessage, (newErrorMessage) => {
 
 <template>
   <BaseSection
-    class="h-full"
     v-motion-slide-visible-once-right
+    class="h-full"
     :duration="300"
   >
     <BaseStack

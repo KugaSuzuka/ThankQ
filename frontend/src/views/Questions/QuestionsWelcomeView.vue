@@ -73,7 +73,7 @@ const { status } = useQuiz();
       size="xl"
       @click="$router.push({name: 'questionConfirmPage'})"
     >
-     自分の回答を見る
+      自分の回答を見る
     </BaseBtn>
   </BaseSection>
 </template>
