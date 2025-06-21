@@ -2,7 +2,7 @@
 import BaseBtn from '@/components/Common/BaseBtn/BaseBtn.vue';
 import BaseCenter from '@/components/Common/BaseCenter/BaseCenter.vue';
 import BaseHeading from '@/components/Common/BaseHeading/BaseHeading.vue';
-import BaseSection from '@/components/Common/BaseSection.vue';
+import BaseSection from '@/components/Common/BaseSection/BaseSection.vue';
 import BaseText from '@/components/Common/BaseText/BaseText.vue';
 import { useQuiz } from '@/composables/useQuiz';
 import { getImagePath } from '@/utils/assetsPath';
@@ -12,37 +12,53 @@ const { status } = useQuiz();
 
 <template>
   <BaseSection
+    v-motion-pop-visible
     class="h-full p-6 flex flex-col gap-4"
+    :duration="500"
   >
     <div class="flex flex-col align-center flex-grow-1 justify-center gap-2">
       <BaseCenter
-        class="items-center"
+        class="items-center h-61"
         component="div"
       >
-        <div>
-          <img
-            alt="クイズを連想させる画像"
-            :src="getImagePath('welcomeImage')"
-          >
-        </div>
+        <img
+          alt="クイズを連想させる画像"
+          :src="getImagePath('welcomeImage')"
+        >
       </BaseCenter>
 
-      <BaseHeading
-        class="text-center py-5"
-        tag="h1"
-      >
-        クイズを出題します！
-      </BaseHeading>
-      <BaseText>
-        新郎新婦に関するクイズを出題します！<br>
-        上位の方にはプレゼントを用意しています☺️<br>
-        結果は披露宴の後半に発表します！！<br>
-        お早めのご回答をお願いします😊
-      </BaseText>
+      <div>
+        <BaseHeading
+          class="text-center py-5"
+          tag="h1"
+        >
+          クイズターイム！
+        </BaseHeading>
+        <BaseCenter
+          class="items-center"
+          component="div"
+        >
+          <BaseText
+            v-motion
+            class="w-fit"
+            :delay="100"
+            :duration="1000"
+            :enter="{ opacity: 1, y: 0, scale: 1 }"
+            :initial="{ opacity: 0, y: 100 }"
+            :variants="{ custom: { scale: 2 } }"
+          >
+            新郎新婦に関するクイズを出題します！<br>
+            上位の方にはプレゼントを用意しています☺️<br>
+            結果は披露宴の後半に発表！！<br>
+            お早めのご回答をお願いします😊
+          </BaseText>
+        </BaseCenter>
+      </div>
     </div>
 
     <BaseBtn
       v-if="status !== 'done'"
+      v-motion
       color="primary"
       size="xl"
       @click="$router.push({name: 'questionAnswerPage', params: {
@@ -57,9 +73,8 @@ const { status } = useQuiz();
       size="xl"
       @click="$router.push({name: 'questionConfirmPage'})"
     >
-      回答を確認する
+      自分の回答を見る
     </BaseBtn>
   </BaseSection>
 </template>
-
 

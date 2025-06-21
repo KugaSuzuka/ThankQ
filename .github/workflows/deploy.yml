@@ -42,7 +42,7 @@ jobs:
 
   # 1) Frontend ビルド & S3 へデプロイ
   build-frontend:
-#    if: needs.path-filter.outputs.frontend == 'true'
+    if: needs.path-filter.outputs.frontend == 'true'
     needs: path-filter
     runs-on: ubuntu-latest
 
@@ -111,3 +111,32 @@ jobs:
           -t $ECR_URI:latest \
           backend
           docker push --all-tags $ECR_URI
+      - name: Update ECS service
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::769392325383:role/thankq-ci-ecr
+          aws-region: ap-northeast-1
+
+      - name: Register new task def and deploy
+        id: deploy
+        run: |
+          # (1) 既存タスク定義を JSON 取得
+          aws ecs describe-task-definition \
+            --task-definition thankq-app \
+            --query taskDefinition > td.json
+
+          # (2) image を latest に置換して新しい TD を登録
+          IMAGE="$ECR_REPO:latest"
+          jq ' .containerDefinitions[0].image = env.IMAGE
+             | del(.taskDefinitionArn,.revision,.status,.requiresAttributes,.compatibilities,.registeredAt,.registeredBy)'
+             td.json > new.json
+
+          REVISION=$(aws ecs register-task-definition --cli-input-json file://new.json \
+                     --query 'taskDefinition.revision' --output text)
+
+          # (3) サービスを New TD に更新
+          aws ecs update-service \
+              --cluster thankq \
+              --service thankq-svc \
+              --task-definition thankq-app:$REVISION \
+              --force-new-deployment

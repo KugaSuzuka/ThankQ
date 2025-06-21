@@ -1,15 +1,26 @@
 <script setup lang="ts">
+import BaseBtn from '@/components/Common/BaseBtn/BaseBtn.vue';
 import BaseCarousel from '@/components/Common/BaseCarousel/BaseCarousel.vue';
-import BaseSection from '@/components/Common/BaseSection.vue';
+import BaseSection from '@/components/Common/BaseSection/BaseSection.vue';
 import ThLetter from '@/components/messages/Letter/ThLetter.vue';
 import { useGuest } from '@/composables/useGuest';
 import { useGuestStore } from '@/stores/guestStore';
 
+const instaxListRef = useTemplateRef('instax-list');
 const store = useGuestStore();
 const { isLoading } = useGuest();
-const isShown = ref(false)
+const isShown = ref(false);
+const isShownInstax = ref(false);
+const intersecting = ref(false);
 const currentIndex = ref(0);
+const noTypingAnimation = ref(false);
 
+
+const messageList = computed(() => {
+  return store.guest?.messages.filter((item) => {
+    return !!item.message
+  })
+})
 const imgList = computed(() => {
   return store.guest?.guest_photos.map((item) => {
     return { url: item.photo_path }
@@ -24,19 +35,61 @@ function onDraw() {
   currentIndex.value = currentIndex.value + 1
 }
 
-setTimeout(() => {
-  isShown.value = true;
-}, 100)
+async function onStart() {
+  if (isShownInstax.value) {
+    return;
+  }
+
+  isShownInstax.value = true;
+  await nextTick();
+  startIntersectionObserver();
+}
+
+function init() {
+  setTimeout(() => {
+    isShown.value = true;
+  }, 100)
+}
+
+function onClickSkip() {
+  noTypingAnimation.value = true;
+}
+
+function startIntersectionObserver() {
+  const { stop } = useIntersectionObserver(
+  instaxListRef,
+  ([entry], ) => {
+    if (entry?.isIntersecting) {
+      intersecting.value = entry.isIntersecting;
+      stop();
+    }
+  })
+}
+
+init()
 </script>
 
 <template>
+  <Teleport to="#global-header">
+    <div class="flex justify-end">
+      <BaseBtn
+        color="info"
+        size="xs"
+        variant="outline"
+        @click="onClickSkip"
+      >
+        <span class="text-xs">スキップ</span>
+      </BaseBtn>
+    </div>
+  </Teleport>
+
   <Transition name="fade-only">
     <BaseSection
       v-if="isShown"
-      class="h-full p-6 flex flex-col gap-4"
+      class="h-full p-6 flex flex-col gap-4 overflow-x-hidden"
     >
       <div
-        v-for="item, index in store.guest?.messages"
+        v-for="item, index in messageList"
         :key="index"
       >
         <ThLetter
@@ -44,13 +97,21 @@ setTimeout(() => {
           :body="item.message"
           :from="item.name"
           :is-loading
+          :no-animation="noTypingAnimation"
           :to="index === 0 ? store.guest?.name : ''"
           @draw="onDraw"
+          @start="onStart"
         />
       </div>
-      <div>
+      <div
+        v-if="isShownInstax"
+        ref="instax-list"
+        class="h-82"
+      >
         <BaseCarousel
-          v-if="imgList"
+          v-if="imgList && intersecting"
+          v-motion-fade
+          :duration="1200"
           :img-list
           :is-loading
         />

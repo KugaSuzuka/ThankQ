@@ -1,19 +1,15 @@
 <script setup lang="ts">
+import BaseHandWrittenText from '@/components/Common/BaseHandWrittenText/BaseHandWrittenText.vue';
+
 
 // defineProps<BaseTextProps>();
 </script>
 
 <template>
-  <div
-    class="tracking-wide text-base message-row min-h-15 px-8 flex items-center
+  <BaseHandWrittenText
+    class="min-h-15 px-8 flex items-center
     border-b-1 border-dotted border-grey"
   >
     <slot />
-  </div>
+  </BaseHandWrittenText>
 </template>
-
-<style scoped>
-.message-row {
-  font-family: 'Zen Kurenaido', sans-serif;
-}
-</style>

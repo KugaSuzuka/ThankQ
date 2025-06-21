@@ -6,10 +6,12 @@ import MessageRowFrom from '../MessageRow/MessageRowFrom.vue';
 import MessageRowTitle from '../MessageRow/MessageRowTitle.vue';
 import TypeWriter from '../TypeWriter/TypeWriter.vue';
 import type { ThLetterProps } from './Type';
+import BaseText from '@/components/Common/BaseText/BaseText.vue';
 
 const props = defineProps<ThLetterProps>();
 const emits = defineEmits<{
-  draw: [];
+  draw:  [];
+  start: [];
 }>()
 const DEFAULT_MAX_PER_LINE = 15;
 const typingIndex = ref(-1);
@@ -17,7 +19,7 @@ const lines = ref<string[]>([])
 const letterRef = useTemplateRef('letter');
 
 const perLine = computed(() => {
-  const CHAR_WIDTH = 18;
+  const CHAR_WIDTH = 20;
   const ROW_PADDING_X = 64
   const _width = letterRef.value?.offsetWidth
   if (_width) {
@@ -37,6 +39,13 @@ const isShowFrom = computed(() => {
   return typingIndex.value === lines.value.length
 })
 
+const dear = computed(() => {
+  if (!props.to) {
+    return '親愛なるあなた 様';
+  }
+  return `${props.to} 様`;
+});
+
 function onFinish() {
   _addIndex();
 }
@@ -53,7 +62,20 @@ function init() {
   if (!props.to) {
     _addIndex();
   }
+
+  emits('start')
 }
+
+
+const stop = watch(() => {
+  return props.noAnimation
+}, async (newNoAnimation) => {
+  if (newNoAnimation) {
+    await nextTick();
+    emits('draw')
+    stop()
+  }
+});
 
 init();
 
@@ -89,9 +111,16 @@ onMounted(async () => {
           width="90"
         >
       </div>
-      <MessageRowTitle v-if="to">
+      <MessageRowTitle
+        v-if="to"
+        class="text-xl"
+      >
+        <span v-if="noAnimation">
+          {{ dear }}
+        </span>
         <TypeWriter
-          :text="`${to}へ`"
+          v-else
+          :text="dear"
           :type-speed="10"
           @finish="onFinish"
         />
@@ -100,19 +129,31 @@ onMounted(async () => {
         v-for="line, index in lines"
         :key="index"
       >
-        <TypeWriter
-          v-if="isShowRow(index)"
-          :text="line"
-          :type-speed="1"
-          @finish="onFinish"
-        />
+        <span
+          v-if="noAnimation"
+        >
+          {{ line }}
+        </span>
+        <template v-else>
+          <TypeWriter
+            v-if="isShowRow(index)"
+            :text="line"
+            :type-speed="1"
+            @finish="onFinish"
+          />
+        </template>
       </MessageRowBody>
       <MessageRowFrom>
-        <TypeWriter
-          v-if="isShowFrom"
-          :text="from"
-          @finish="emits('draw')"
-        />
+        <BaseText v-if="noAnimation">
+          {{ from }}
+        </BaseText>
+        <template v-else>
+          <TypeWriter
+            v-if="isShowFrom"
+            :text="from"
+            @finish="emits('draw')"
+          />
+        </template>
       </MessageRowFrom>
       <MessageRow />
     </template>

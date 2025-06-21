@@ -1,8 +1,12 @@
 <script lang="ts">
 import AlertDialog from '@/components/Dialogs/AlertDialog/AlertDialog.vue';
+import PhotosDialog from '@/components/Dialogs/PhotosDialog/PhotosDialog.vue';
 
 export default {
-  components: { AlertDialog },
+  components: {
+    AlertDialog,
+    PhotosDialog,
+  },
 }
 </script>
 <script setup lang="ts">

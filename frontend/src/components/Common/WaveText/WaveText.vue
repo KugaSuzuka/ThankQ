@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import BaseText from '../BaseText/BaseText.vue';
 import type { WaveTextProps } from './Type';
 defineProps<WaveTextProps>()
 

@@ -19,3 +19,9 @@ const isPassed = computed(() => {
     }"
   />
 </template>
+
+<style>
+.step {
+  min-width: 3rem;
+}
+</style>
