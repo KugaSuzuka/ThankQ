@@ -23,7 +23,7 @@ const height = computed(() => props.height ?? 270);
     >
     <BaseHandWrittenText
       v-if="props.tapIcon"
-      class="text-xl absolute bottom-4 right-4 flex align-center"
+      class="text-xl absolute bottom-4  flex align-center"
     >
       Tap!!
       <BaseIcon
