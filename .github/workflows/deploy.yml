@@ -120,15 +120,19 @@ jobs:
       - name: Register new task def and deploy
         id: deploy
         run: |
+          # ECRリポジトリURIを取得
+          ECR_URI=$(aws ecr describe-repositories --repository-names $ECR_REPOSITORY \
+                    --query 'repositories[0].repositoryUri' --output text)
+          
           # (1) 既存タスク定義を JSON 取得
           aws ecs describe-task-definition \
             --task-definition thankq-app \
             --query taskDefinition > td.json
 
           # (2) image を latest に置換して新しい TD を登録
-          IMAGE="$ECR_REPO:latest"
-          jq ' .containerDefinitions[0].image = env.IMAGE
-             | del(.taskDefinitionArn,.revision,.status,.requiresAttributes,.compatibilities,.registeredAt,.registeredBy)'
+          IMAGE="${ECR_URI}:latest"
+          jq --arg image "$IMAGE" \
+             '.containerDefinitions[0].image = $image | del(.taskDefinitionArn,.revision,.status,.requiresAttributes,.compatibilities,.registeredAt,.registeredBy)' \
              td.json > new.json
 
           REVISION=$(aws ecs register-task-definition --cli-input-json file://new.json \
