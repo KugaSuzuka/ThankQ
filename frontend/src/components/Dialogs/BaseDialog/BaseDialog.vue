@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BaseHeading from '@/components/Common/BaseHeading/BaseHeading.vue';
 import type { BaseDialogProps } from './Type';
+import BaseStack from '@/components/Common/BaseStack/BaseStack.vue';
 
 defineProps<BaseDialogProps>();
 const dialogRef = useTemplateRef('AlertDialog');
@@ -31,26 +32,42 @@ onMounted(() => {
   <dialog
     ref="AlertDialog"
     class="modal"
+    :class="[modalClass]"
   >
-    <div class="modal-box">
+    <BaseStack
+      class="modal-box"
+      :class="[contentClass]"
+      component="section"
+    >
       <BaseHeading tag="h3">
         <slot name="heading">
-          {{ title ?? 'ここにタイトルが入ります' }}
+          {{ title }}
         </slot>
       </BaseHeading>
 
-      <div class="py-4">
+      <BaseStack
+        class="flex-grow"
+        component="div"
+      >
         <slot />
-      </div>
-
+      </BaseStack>
       <div
         v-if="$slots.footer"
         class="modal-action"
       >
-        <form method="dialog">
+        <form
+          class="modal-backdrop"
+          method="dialog"
+        >
           <slot name="footer" />
         </form>
       </div>
-    </div>
+    </BaseStack>
+    <form
+      class="modal-backdrop"
+      method="dialog"
+    >
+      <button>close</button>
+    </form>
   </dialog>
 </template>
