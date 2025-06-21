@@ -7,17 +7,9 @@ import BaseIcon from '@/components/Common/BaseIcon/BaseIcon.vue';
 const props = withDefaults(defineProps<InstaxCardProps>(),{
   tapIcon: true
 });
-const tapAnimation = ref(true);
 
 const width = computed(() => props.width ?? 202);
 const height = computed(() => props.height ?? 270);
-
-
-onMounted(() => {
-  setTimeout(() => {
-    tapAnimation.value = false;
-  }, 1000);
-})
 
 </script>
 
@@ -36,9 +28,6 @@ onMounted(() => {
       Tap!!
       <BaseIcon
         class="tap-icon ml-1 mt-1"
-        :class="{
-          'tap-icon': tapAnimation,
-        }"
         icon="touch_app"
       />
     </BaseHandWrittenText>
