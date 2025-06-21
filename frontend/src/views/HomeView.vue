@@ -3,7 +3,7 @@ import BaseCard from '@/components/Common/BaseCard/BaseCard.vue';
 import BaseCenter from '@/components/Common/BaseCenter/BaseCenter.vue';
 import BaseHeading from '@/components/Common/BaseHeading/BaseHeading.vue';
 import BaseLink from '@/components/Common/BaseLink/BaseLink.vue';
-import BaseSection from '@/components/Common/BaseSection.vue';
+import BaseSection from '@/components/Common/BaseSection/BaseSection.vue';
 import WaveText from '@/components/Common/WaveText/WaveText.vue';
 import ThHearts from '@/components/Splash/ThHearts.vue';
 import { useGuest } from '@/composables/useGuest';

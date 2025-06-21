@@ -1,5 +1,15 @@
 <script setup lang="ts">
+import type { BaseSectionProps } from './Type';
+
+const props = defineProps<BaseSectionProps>()
+
 const sectionRef = useTemplateRef('section');
+
+const height = computed(() => {
+  if (props.noHFull) return '';
+
+  return 'h-full';
+})
 
 function scrollToTop() {
   sectionRef.value?.scroll({
@@ -16,7 +26,8 @@ defineExpose({
 <template>
   <section
     ref="section"
-    class="h-full p-6 overflow-auto"
+    class="p-6 overflow-auto"
+    :class="[height]"
   >
     <slot />
   </section>

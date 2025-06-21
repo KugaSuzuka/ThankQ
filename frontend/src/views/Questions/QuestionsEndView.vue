@@ -3,7 +3,7 @@
 import BaseHeading from '@/components/Common/BaseHeading/BaseHeading.vue';
 import BaseIcon from '@/components/Common/BaseIcon/BaseIcon.vue';
 import BaseLink from '@/components/Common/BaseLink/BaseLink.vue';
-import BaseSection from '@/components/Common/BaseSection.vue';
+import BaseSection from '@/components/Common/BaseSection/BaseSection.vue';
 import BaseText from '@/components/Common/BaseText/BaseText.vue';
 import TypeWriter from '@/components/messages/TypeWriter/TypeWriter.vue';
 import { links } from '@/consts/links';

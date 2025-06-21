@@ -3,7 +3,7 @@
 import BaseBtn from '@/components/Common/BaseBtn/BaseBtn.vue';
 import BaseCard from '@/components/Common/BaseCard/BaseCard.vue';
 import BaseHeading from '@/components/Common/BaseHeading/BaseHeading.vue';
-import BaseSection from '@/components/Common/BaseSection.vue';
+import BaseSection from '@/components/Common/BaseSection/BaseSection.vue';
 import BaseStack from '@/components/Common/BaseStack/BaseStack.vue';
 import BaseText from '@/components/Common/BaseText/BaseText.vue';
 import ConfirmListItem from '@/components/Questions/ConfirmListItem/ConfirmListItem.vue';
@@ -62,8 +62,8 @@ watch(errorMessage, (newErrorMessage) => {
 
 <template>
   <BaseSection
-    class="h-full"
     v-motion-slide-visible-once-right
+    class="h-full"
     :duration="300"
   >
     <BaseStack

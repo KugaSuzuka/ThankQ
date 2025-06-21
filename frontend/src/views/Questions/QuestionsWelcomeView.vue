@@ -2,7 +2,7 @@
 import BaseBtn from '@/components/Common/BaseBtn/BaseBtn.vue';
 import BaseCenter from '@/components/Common/BaseCenter/BaseCenter.vue';
 import BaseHeading from '@/components/Common/BaseHeading/BaseHeading.vue';
-import BaseSection from '@/components/Common/BaseSection.vue';
+import BaseSection from '@/components/Common/BaseSection/BaseSection.vue';
 import BaseText from '@/components/Common/BaseText/BaseText.vue';
 import { useQuiz } from '@/composables/useQuiz';
 import { getImagePath } from '@/utils/assetsPath';
@@ -73,7 +73,7 @@ const { status } = useQuiz();
       size="xl"
       @click="$router.push({name: 'questionConfirmPage'})"
     >
-     自分の回答を見る
+      自分の回答を見る
     </BaseBtn>
   </BaseSection>
 </template>

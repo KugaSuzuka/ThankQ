@@ -10,7 +10,8 @@ import BaseText from '@/components/Common/BaseText/BaseText.vue';
 
 const props = defineProps<ThLetterProps>();
 const emits = defineEmits<{
-  draw: [];
+  draw:  [];
+  start: [];
 }>()
 const DEFAULT_MAX_PER_LINE = 15;
 const typingIndex = ref(-1);
@@ -61,6 +62,8 @@ function init() {
   if (!props.to) {
     _addIndex();
   }
+
+  emits('start')
 }
 
 

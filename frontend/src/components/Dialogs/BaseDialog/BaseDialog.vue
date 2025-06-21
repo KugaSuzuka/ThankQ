@@ -1,20 +1,23 @@
 <script setup lang="ts">
 import BaseHeading from '@/components/Common/BaseHeading/BaseHeading.vue';
 import type { BaseDialogProps } from './Type';
+import BaseStack from '@/components/Common/BaseStack/BaseStack.vue';
+import BaseBtn from '@/components/Common/BaseBtn/BaseBtn.vue';
+import BaseIcon from '@/components/Common/BaseIcon/BaseIcon.vue';
 
 defineProps<BaseDialogProps>();
-const dialogRef = useTemplateRef('AlertDialog');
+const dialogRef = useTemplateRef('BaseDialog');
 
 defineExpose({
   open,
-  close
+  closeDialog
 })
 
 function open() {
   dialogRef.value?.showModal();
 }
 
-function close() {
+function closeDialog() {
   dialogRef.value?.close();
 }
 
@@ -29,28 +32,53 @@ onMounted(() => {
 
 <template>
   <dialog
-    ref="AlertDialog"
-    class="modal"
+    ref="BaseDialog"
+    class="modal base-dialog"
+    :class="[modalClass]"
   >
-    <div class="modal-box">
+    <BaseBtn
+      v-if="closeIcon"
+      behavior="circle"
+      class="absolute top-4 right-2"
+      color="neutral"
+      size="lg"
+      variant="outline"
+      @click="closeDialog"
+    >
+      <BaseIcon
+        icon="close"
+      />
+    </BaseBtn>
+    <BaseStack
+      class="modal-box"
+      :class="[contentClass]"
+      component="section"
+    >
       <BaseHeading tag="h3">
         <slot name="heading">
-          {{ title ?? 'ここにタイトルが入ります' }}
+          {{ title }}
         </slot>
       </BaseHeading>
 
-      <div class="py-4">
+      <BaseStack
+        class="flex-grow"
+        component="div"
+      >
         <slot />
-      </div>
+      </BaseStack>
 
-      <div
+      <footer
         v-if="$slots.footer"
         class="modal-action"
       >
-        <form method="dialog">
-          <slot name="footer" />
-        </form>
-      </div>
-    </div>
+        <slot name="footer" />
+      </footer>
+    </BaseStack>
+    <form
+      class="modal-backdrop"
+      method="dialog"
+    >
+      <button />
+    </form>
   </dialog>
 </template>
