@@ -7,13 +7,11 @@ import BaseBtn from '@/components/Common/BaseBtn/BaseBtn.vue';
 import type { AlertDialogPropsType } from './Type.ts';
 
 defineProps<AlertDialogPropsType>();
-useTemplateRef('base-dialog');
+const dialogRef = useTemplateRef('base-dialog');
 
-defineExpose({
-  open,
-  close
-})
-
+function close() {
+  dialogRef.value?.closeDialog();
+}
 </script>
 
 <template>
@@ -50,6 +48,7 @@ defineExpose({
       <BaseBtn
         color="error"
         size="md"
+        @click="close"
       >
         閉じる
       </BaseBtn>
