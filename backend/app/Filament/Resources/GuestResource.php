@@ -78,9 +78,6 @@ class GuestResource extends Resource
                     ->copyableState(fn (string $state): string => 'https://thankq-wedding.com/#/'.$state)
                     ->width('300px'),
             ])
-            ->filters([
-                //
-            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
