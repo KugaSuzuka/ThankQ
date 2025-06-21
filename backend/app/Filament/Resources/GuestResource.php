@@ -62,9 +62,21 @@ class GuestResource extends Resource
                     ->label('招待者')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('message_from_groom')
-                    ->label('新郎からのメッセージ'),
+                    ->label('新郎からのメッセージ')
+                    ->width('200px')
+                    ->wrapHeader()
+                    ->wrap(),
                 Tables\Columns\TextColumn::make('message_from_bride')
-                    ->label('新婦からのメッセージ'),
+                    ->label('新婦からのメッセージ')
+                    ->width('200px')
+                    ->wrapHeader()
+                    ->wrap(),
+                Tables\Columns\TextColumn::make('access_token')
+                    ->label('URL')
+                    ->formatStateUsing(fn (string $state): string => 'https://thankq-wedding.com/#/' . $state)
+                    ->copyable()
+                    ->copyableState(fn (string $state): string => 'https://thankq-wedding.com/#/' . $state)
+                    ->width('300px'),
             ])
             ->filters([
                 //

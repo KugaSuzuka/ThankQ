@@ -33,7 +33,13 @@ class QuizAnswerSummary extends Page implements Tables\Contracts\HasTable
     {
         return $table
             ->query(
-                Guest::with('quizAnswers.quizChoice.quiz') // クイズ回答も一緒に取る
+                Guest::with('quizAnswers.quizChoice.quiz')
+                    ->leftJoin('quiz_answers', 'guests.id', '=', 'quiz_answers.guest_id')
+                    ->leftJoin('quiz_choices', 'quiz_answers.quiz_choice_id', '=', 'quiz_choices.id')
+                    ->select('guests.*')
+                    ->selectRaw('SUM(CASE WHEN quiz_choices.is_correct = 1 THEN 1 ELSE 0 END) as correct_count')
+                    ->groupBy('guests.id')
+                    ->orderBy('correct_count', 'desc')
             )
             ->columns([
                 TextColumn::make('name')
@@ -45,6 +51,32 @@ class QuizAnswerSummary extends Page implements Tables\Contracts\HasTable
                         return $record->quizAnswers
                             ->filter(fn (QuizAnswer $quizAnswer) => $quizAnswer->quizChoice->is_correct)
                             ->count();
+                    })
+                    ->color(function (Guest $record) {
+                        $correctCount = $record->quizAnswers
+                            ->filter(fn (QuizAnswer $quizAnswer) => $quizAnswer->quizChoice->is_correct)
+                            ->count();
+                        
+                        // 全ユーザーの正解数を取得して順位を判定
+                        $allCorrectCounts = Guest::with('quizAnswers.quizChoice')
+                            ->get()
+                            ->map(function ($guest) {
+                                return $guest->quizAnswers
+                                    ->filter(fn (QuizAnswer $quizAnswer) => $quizAnswer->quizChoice->is_correct)
+                                    ->count();
+                            })
+                            ->sortDesc()
+                            ->unique()
+                            ->values();
+                        
+                        $rank = $allCorrectCounts->search($correctCount) + 1;
+                        
+                        return match($rank) {
+                            1 => 'warning', // 1位：金色
+                            2 => 'gray',    // 2位：銀色
+                            3 => 'danger',  // 3位：銅色
+                            default => null,
+                        };
                     }),
 
                 // 1問目
