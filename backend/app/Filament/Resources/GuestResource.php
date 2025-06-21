@@ -73,9 +73,9 @@ class GuestResource extends Resource
                     ->wrap(),
                 Tables\Columns\TextColumn::make('access_token')
                     ->label('URL')
-                    ->formatStateUsing(fn (string $state): string => 'https://thankq-wedding.com/#/' . $state)
+                    ->formatStateUsing(fn (string $state): string => 'https://thankq-wedding.com/#/'.$state)
                     ->copyable()
-                    ->copyableState(fn (string $state): string => 'https://thankq-wedding.com/#/' . $state)
+                    ->copyableState(fn (string $state): string => 'https://thankq-wedding.com/#/'.$state)
                     ->width('300px'),
             ])
             ->filters([
