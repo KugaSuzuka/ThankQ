@@ -73,6 +73,7 @@ watch(errorMessage, (newErrorMessage) => {
       <BaseHeading tag="h1">
         回答の確認
       </BaseHeading>
+      <BaseText>回答は<strong>1回のみ</strong>となります！<br></BaseText>
       <BaseCard shadow="xs">
         <BaseStack component="ul">
           <ConfirmListItem
@@ -85,10 +86,8 @@ watch(errorMessage, (newErrorMessage) => {
         </BaseStack>
       </BaseCard>
 
-      <BaseText>
-        回答は<strong>1回のみ</strong>となります！<br>
+      <BaseText v-if="status === 'done'">
         <RouterLink
-          v-if="status === 'done'"
           class="text-sm link"
           :to="{name: 'questionEndPage'}"
         >

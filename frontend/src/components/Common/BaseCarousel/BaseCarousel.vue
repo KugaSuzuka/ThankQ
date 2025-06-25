@@ -27,7 +27,8 @@ function onClickImage(index: number) {
       <InstaxCard
         class="absolute photo-card"
         :src="imgItem.url"
-        :style="`--i: ${index - 1}; z-index: ${props.imgList.length - index};`"
+        :style="`--i: ${index - 1}; z-index: ${index};`"
+        :tap-icon="index === imgList.length - 1"
       />
     </button>
   </div>
@@ -41,7 +42,7 @@ function onClickImage(index: number) {
   transform:
     translateX(-50%)
     rotate(calc(var(--i) * 12deg))
-    translateX(calc(var(--i) * 60px));
+    translateX(calc(var(--i) * 30px));
   transform-origin: bottom center;
   /* z-index: calc(10 - abs(var(--i))); */
   transition: transform 0.3s ease;

@@ -27,7 +27,7 @@ const height = computed(() => props.height ?? 270);
     >
       Tap!!
       <BaseIcon
-        class="tap-icon ml-1 mt-1"
+        class="tap-icon ml-1 mt-1 "
         icon="touch_app"
       />
     </BaseHandWrittenText>

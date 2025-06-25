@@ -16,24 +16,26 @@ const { status } = useQuiz();
     class="h-full p-6 flex flex-col gap-4"
     :duration="500"
   >
-    <div class="flex flex-col align-center flex-grow-1 justify-center gap-2">
+    <div class="flex flex-col align-center flex-grow-1 justify-center gap-6">
       <BaseCenter
-        class="items-center h-61"
+        class="items-center rounded-lg"
         component="div"
       >
         <img
           alt="クイズを連想させる画像"
+          class="rounded-lg"
           :src="getImagePath('welcomeImage')"
         >
       </BaseCenter>
 
+      <BaseHeading
+        class="text-center"
+        tag="h1"
+      >
+        クイズターイム！
+      </BaseHeading>
+
       <div>
-        <BaseHeading
-          class="text-center py-5"
-          tag="h1"
-        >
-          クイズターイム！
-        </BaseHeading>
         <BaseCenter
           class="items-center"
           component="div"

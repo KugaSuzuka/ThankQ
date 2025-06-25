@@ -104,14 +104,14 @@ init()
         />
       </div>
       <div
-        v-if="isShownInstax"
+        v-if="isShownInstax && imgList.length > 0"
         ref="instax-list"
         class="h-82"
       >
         <BaseCarousel
-          v-if="imgList && intersecting"
-          v-motion-fade
-          :duration="1200"
+          v-show="intersecting"
+          v-motion-fade-visible
+          :duration="500"
           :img-list
           :is-loading
         />
