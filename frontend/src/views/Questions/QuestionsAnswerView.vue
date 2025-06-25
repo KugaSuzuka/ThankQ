@@ -101,6 +101,7 @@ watch(currentQuiz, () => {
   >
     <BaseStack
       component="div"
+      gap="md"
       grow
     >
       <BaseHeading
@@ -131,7 +132,8 @@ watch(currentQuiz, () => {
             grow
           >
             <BaseHeading
-              class="py-8"
+              class="pb-8"
+              style="padding-top: 40px;"
               tag="h3"
             >
               Q. {{ currentQuiz.question }}
@@ -159,6 +161,7 @@ watch(currentQuiz, () => {
             class="w-30"
             color="secondary"
             size="lg"
+            variant="outline"
             @click="onPrev"
           >
             戻る
