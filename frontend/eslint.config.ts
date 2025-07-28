@@ -14,7 +14,7 @@ export default defineConfigWithVueTs(
   },
   {
     name: "app/files-to-ignore",
-    ignores: ["**/dist/**", "**/dist-ssr/**", "**/coverage/**"],
+    ignores: ["**/dist/**", "**/dist-ssr/**", "**/coverage/**", "histoire.config.ts"],
   },
   pluginVue.configs["flat/essential"],
   pluginVue.configs["flat/strongly-recommended"],
@@ -60,6 +60,15 @@ export default defineConfigWithVueTs(
       }],
       "no-console": ["error"],
       "eqeqeq": ["error"],
+    }
+  },
+  {
+    name: "histoire-story-files",
+    files: ["**/*.story.vue"],
+    rules: {
+      "vue/no-undef-components": "off",
+      "vue/max-len": "off",
+      "@typescript-eslint/no-unused-vars": "off",
     }
   },
 )
