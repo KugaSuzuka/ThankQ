@@ -22,8 +22,8 @@ const route = useRoute();
 
 function onClick() {
   showMail.value = false
-  setTimeout(async () => {
-    await router.push({
+  setTimeout(() => {
+    void router.push({
       name: 'messagePage',
       params: {
       token: route.params.token,
